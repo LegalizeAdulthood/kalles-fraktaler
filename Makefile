@@ -1,5 +1,6 @@
 COMPILE := x86_64-w64-mingw32-g++
-COMPILE_FLAGS := -xc++ -fpermissive -g -O3 -ffast-math -Wno-write-strings
+LINK := x86_64-w64-mingw32-g++
+COMPILE_FLAGS := -xc++ -fpermissive -g -O3 -ffast-math -Wno-write-strings -pipe -MMD
 LINK_FLAGS := -static-libgcc -static-libstdc++ -Wl,--stack,67108864
 LIBS := -lgdi32 -lcomdlg32 -lole32 -loleaut32 -lcomctl32 -luuid
 WINDRES := x86_64-w64-mingw32-windres
@@ -122,19 +123,36 @@ jpeg/jpeglib.h \
 jpeg/jversion.h \
 jpeg/transupp.h
 
-SOURCES_CPP = $(FRAKTAL_SOURCES_CPP) $(COMMON_SOURCES_CPP) $(LDBL_SOURCES_CPP)
-SOURCES_C = $(JPEG_SOURCES_CPP) $(JPEG_SOURCES_C)
+SOURCES_CPP = $(FRAKTAL_SOURCES_CPP) $(COMMON_SOURCES_CPP) $(LDBL_SOURCES_CPP) $(JPEG_SOURCES_CPP)
+SOURCES_C = $(JPEG_SOURCES_C)
 SOURCES_H = $(FRAKTAL_SOURCES_H) $(COMMON_SOURCES_H) $(JPEG_SOURCES_H)
 
 SOURCES = $(SOURCES_CPP) $(SOURCES_C) $(SOURCES_H)
 
+OBJECTS_CPP := $(patsubst %.cpp,%.o,$(SOURCES_CPP))
+OBJECTS_C := $(patsubst %.c,%.o,$(SOURCES_C))
+OBJECTS := $(OBJECTS_CPP) $(OBJECTS_C) res.o
+
+DEPENDS := $(patsubst %.o,%.d,$(OBJECTS))
+
 all: fraktal_sft64.exe
 
-fraktal_sft64.exe: $(SOURCES) res.o Makefile
-	$(COMPILE) -o fraktal_sft64.exe $(COMPILE_FLAGS) $(SOURCES_CPP) $(SOURCES_C) res.o $(LINK_FLAGS) $(LIBS)
+clean:
+	rm -f $(OBJECTS) $(DEPENDS)
 
-res.o: fraktal_sft/fraktal_sft.rc Makefile
+fraktal_sft64.exe: $(OBJECTS)
+	$(LINK) -o fraktal_sft64.exe $(OBJECTS) $(LINK_FLAGS) $(LIBS)
+
+res.o: fraktal_sft/fraktal_sft.rc
 	$(WINDRES) -i fraktal_sft/fraktal_sft.rc -o res.o
 
-ldbl64.dll: $(LDBL_SOURCES_CPP) Makefile
+ldbl64.dll: $(LDBL_SOURCES_CPP)
 	$(COMPILE) -o ldbl64.dll $(COMPILE_FLAGS) -shared $(LDBL_SOURCES_CPP) $(LINK_FLAGS)
+
+%.o: %.cpp
+	$(COMPILE) $(COMPILE_FLAGS) -o $@ -c $<
+
+%.o: %.c
+	$(COMPILE) $(COMPILE_FLAGS) -o $@ -c $<
+
+-include $(DEPENDS)
