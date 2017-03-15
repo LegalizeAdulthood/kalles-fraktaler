@@ -7541,8 +7541,8 @@ void CFraktalSFT::RenderFractal()
 
 	// CalcStart
 	if (!m_bAddReference){
-		for (y = 0; y<m_nY; y++){
-			for (x = 0; x<m_nX; x++){
+		for (x = 0; x<m_nX; x++){
+			for (y = 0; y<m_nY; y++){
 				m_nPixels[x][y] = -1;
 				m_nTrans[x][y] = 0;
 			}
@@ -7655,8 +7655,8 @@ void CFraktalSFT::RenderFractalLDBL()
 
 	// CalcStart
 	if (!m_bAddReference){
-		for (y = 0; y<m_nY; y++){
-			for (x = 0; x<m_nX; x++){
+		for (x = 0; x<m_nX; x++){
+			for (y = 0; y<m_nY; y++){
 				m_nPixels[x][y] = -1;
 				m_nTrans[x][y] = 0;
 			}
@@ -7765,8 +7765,8 @@ void CFraktalSFT::RenderFractalEXP()
 
 	// CalcStart
 	if (!m_bAddReference){
-		for (y = 0; y<m_nY; y++){
-			for (x = 0; x<m_nX; x++){
+		for (x = 0; x<m_nX; x++){
+			for (y = 0; y<m_nY; y++){
 				m_nPixels[x][y] = -1;
 				m_nTrans[x][y] = 0;
 			}
