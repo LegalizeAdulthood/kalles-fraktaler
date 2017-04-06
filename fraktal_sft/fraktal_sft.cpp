@@ -2528,7 +2528,7 @@ void CFraktalSFT::CalculateReference()
 {
 	int i;
 	if (m_db_dxr)
-		delete m_db_dxr;
+		delete[] m_db_dxr;
 	m_db_dxr = new double [m_nMaxIter];
 	if (m_db_dxi)
 		delete[] m_db_dxi;
