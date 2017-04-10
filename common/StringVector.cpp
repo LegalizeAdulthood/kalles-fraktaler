@@ -304,7 +304,7 @@ void CStringVektor::Clean()
 {
 	int i;
 	for(i=0;i<m_nStrings;i++)
-		delete m_pszStrings[i];
+		delete[] m_pszStrings[i];
 	free_stringtable(m_pszStrings);
 	m_nStrings=0;
 	m_pszStrings=NULL;
@@ -383,7 +383,7 @@ int CStringVektor::DeleteString(int nIndex)
 {
 	if(nIndex<0 || nIndex>=m_nStrings)
 		return 0;
-	delete m_pszStrings[nIndex];
+	delete[] m_pszStrings[nIndex];
 	m_nStrings--;
 	for(int i=nIndex;i<m_nStrings;i++){
 		m_pnStrings[i] = m_pnStrings[i+1];
@@ -405,7 +405,7 @@ int CStringVektor::SetString(int nIndex, const char *szString, int nSize)
 	memcpy(m_pszStrings[nIndex],szString,m_pnStrings[nIndex]+1);
 	m_pszStrings[nIndex][m_pnStrings[nIndex]]=0;
 	m_pnIndexValues[nIndex] = MakeIndex(szString, m_pnStrings[nIndex]);
-	delete szTmp;
+	delete[] szTmp;
 
 	return 1;
 }
@@ -425,7 +425,7 @@ int CStringVektor::AppendString(int nIndex, const char *szString, int nSize)
 	memcpy(m_pszStrings[nIndex]+nPrevSize,szString,nSize+1);
 	m_pszStrings[nIndex][m_pnStrings[nIndex]]=0;
 	m_pnIndexValues[nIndex] = MakeIndex(m_pszStrings[nIndex], m_pnStrings[nIndex]);
-	delete szTmp;
+	delete[] szTmp;
 
 	return 1;
 }
@@ -461,7 +461,7 @@ int CStringVektor::SetCount(int nCount)
 	int i;
 	if(nCount<m_nStrings){
 		for(i=nCount;i<m_nStrings;i++)
-			delete m_pszStrings[i];
+			delete[] m_pszStrings[i];
 	}
 	else{
 		m_pszStrings = (char**)realloc_stringtable(m_pszStrings,sizeof(char*)*nCount);
@@ -537,7 +537,7 @@ char *CStringVektor::ToText(const char *szFieldSep)
 }
 void CStringVektor::DeleteToText(char *szToText)
 {
-	delete szToText;
+	delete[] szToText;
 }
 int CStringVektor::FindString(const char *szString,int nLen)
 {
@@ -567,7 +567,7 @@ CStringTable::~CStringTable()
 	free_stringtable(m_pVektors);
 	m_nVektors=0;
 	m_pVektors=NULL;
-	delete m_pnHash;
+	delete[] m_pnHash;
 	m_pnHash = NULL;
 }
 int CStringTable::AddRow(char **pszRow, int nRow)
@@ -766,7 +766,7 @@ int CStringTable::ReadCSV(char *szFileName)
 	
 	AddRow();
 	SplitString(szData,";","\r\n");
-	delete szData;
+	delete[] szData;
 	return 1;
 }
 
@@ -883,7 +883,7 @@ void CStringTable::M3QSort(int nColumn,int nOrder,int nType,int left, int right)
 		M3QSort(nColumn,nOrder,nType,i,right);
 
 	if(bInit){
-		delete m_pnOrders;
+		delete[] m_pnOrders;
 		m_pnOrders=NULL;
 	}
 }
@@ -955,7 +955,7 @@ int CStringTable::Load(char *szFile)
 			ReadFile(hFile,sz,nStringSize,&dw,NULL);
 			sz[nStringSize]=0;
 			AddString(i,sz,nStringSize);
-			delete sz;
+			delete[] sz;
 		}
 	}
 	CloseHandle(hFile);
@@ -1052,7 +1052,7 @@ char *CStringTable::ToText(char *szFieldSep, char *szRowSep)
 }
 void CStringTable::DeleteToText(char *szToText)
 {
-	delete szToText;
+	delete[] szToText;
 }
 
 int CStringTable::MoveCol(int nFrom, int nTo)
@@ -1076,7 +1076,7 @@ int CStringTable::MoveRow(int nFrom, int nTo)
 int CStringTable::BuildHash(int nColumn,int nItems)
 {
 	if(m_pnHash)
-		delete m_pnHash;
+		delete[] m_pnHash;
 	m_nHash = nItems;
 	m_nHashColumn = nColumn;
 	m_nLastHash = -1;
