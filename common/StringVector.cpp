@@ -13,6 +13,7 @@
 // THIS DISCLAIMER.
 //#include "stdafx.h"
 #include <windows.h>
+#include <cstdio>
 #include "StringVector.h"
 
 int g_Allocated_StringTable=0;
@@ -319,10 +320,10 @@ int CStringVektor::MakeIndex(char *szString, int nLenght)
 	return (int)nIndex;
 }
 
-int CStringVektor::AddInt(int nVal)
+int CStringVektor::AddInt(intptr_t nVal)
 {
 	char szTmp[80];
-	itoa(nVal,szTmp,10);
+	snprintf(szTmp, 80, "%" PRIdPTR, nVal);
 	return AddString(szTmp);
 }
 int CStringVektor::AddString(char *szString,int nSize)
@@ -630,10 +631,11 @@ int CStringTable::AddString(int nRow, char *szString, int nString)
 	}
 	return 1;
 }
-int CStringTable::AddInt(int nRow, int nVal)
+
+int CStringTable::AddInt(int nRow, intptr_t nVal)
 {
 	char szTmp[80];
-	itoa(nVal,szTmp,10);
+	snprintf(szTmp, 80, "%" PRIdPTR, nVal);
 	return AddString(nRow,szTmp);
 }
 int CStringTable::DeleteRow(int nRow)

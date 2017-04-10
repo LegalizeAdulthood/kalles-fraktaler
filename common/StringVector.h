@@ -1,6 +1,8 @@
 #ifndef __STRINGVECTOR_H__
 #define __STRINGVECTOR_H__
 
+#include <cinttypes>
+
 class CStringVektor
 {
 	char **m_pszStrings;
@@ -11,7 +13,7 @@ public:
 	CStringVektor();
 	~CStringVektor();
 	void Clean();
-	int AddInt(int nVal);
+	int AddInt(intptr_t nVal);
 	int AddString(char *szString,int nSize=-1);
 	int InsertString(int nIndex, char *szString,int nSize=-1);
 	int DeleteString(int nIndex);
@@ -52,7 +54,7 @@ public:
 	int AddRow();
 	int InsertRow(int nRow);
 	int AddString(int nRow, char *szString, int nString=-1);
-	int AddInt(int nRow, int nVal);
+	int AddInt(int nRow, intptr_t nVal);
 	int DeleteRow(int nRow);
 	int DeleteColumn(int nColumn);
 	void Reset();
