@@ -50,7 +50,8 @@ fraktal_sft/newton.cpp \
 fraktal_sft/Parameter.cpp \
 fraktal_sft/png.cpp \
 fraktal_sft/render.cpp \
-fraktal_sft/Settings.cpp
+fraktal_sft/Settings.cpp \
+formula/formula_v16.cpp
 
 FRAKTAL_SOURCES_H = \
 fraktal_sft/CDecNumber.h \
@@ -59,6 +60,7 @@ fraktal_sft/cmdline.h \
 fraktal_sft/colour.h \
 fraktal_sft/complex.h \
 fraktal_sft/floatexp.h \
+fraktal_sft/floatexp_v16.h \
 fraktal_sft/fraktal_sft.h \
 fraktal_sft/gradient.h \
 fraktal_sft/jpeg.h \

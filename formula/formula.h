@@ -4,6 +4,9 @@
 class CFixedFloat;
 class floatexp;
 
+#include "../fraktal_sft/floatexp_v16.h"
+#include <windows.h>
+
 // https://fractalforums.org/fractal-mathematics-and-new-theories/28/perturbation-theory/487/msg3170#msg3170
 // |2w′(w+z)+1|/|δ0|+|w|(|w+2z|+|w|+2|z|)<ϵ/h
 template <typename R>
@@ -38,6 +41,8 @@ bool perturbation_floatexp   (const int m_nFractalType, const int m_nPower, cons
 bool perturbation_double     (const int m_nFractalType, const int m_nPower, const double      *m_db_dxr, const double      *m_db_dxi, const double *m_db_z, int &antal, double &test1, double &test2, int &bGlitch, const double m_nBailout2, const int nMaxIter, const int m_bNoGlitchDetection, const double g_real, const double g_imag, const double g_FactorAR, const double g_FactorAI, double      &xr, double      &xi, const double      cr, const double      ci, double      &dr, double      &di, const double      &e, const double      &h, const      double &daa, const      double &dab, const      double &dba, const      double &dbb);
 bool perturbation_long_double(const int m_nFractalType, const int m_nPower, const long double *dxr,      const long double *dxi,      const double *m_db_z, int &antal, double &test1, double &test2, int &bGlitch, const double m_nBailout2, const int nMaxIter, const int m_bNoGlitchDetection, const double g_real, const double g_imag, const double g_FactorAR, const double g_FactorAI, long double &xr, long double &xi, const long double cr, const long double ci, long double &dr, long double &di, const long double &e, const long double &h, const long double &daa, const long double &dab, const long double &dba, const long double &dbb);
 bool perturbation_floatexp   (const int m_nFractalType, const int m_nPower, const floatexp    *m_dxr,    const floatexp    *m_dxi,    const double *m_db_z, int &antal, double &test1, double &test2, int &bGlitch, const double m_nBailout2, const int nMaxIter, const int m_bNoGlitchDetection, const double g_real, const double g_imag, const double g_FactorAR, const double g_FactorAI, floatexp    &xr, floatexp    &xi, const floatexp    cr, const floatexp    ci, floatexp    &dr, floatexp    &di, const floatexp    &e, const floatexp    &h, const floatexp    &daa, const floatexp    &dab, const floatexp    &dba, const floatexp    &dbb);
+
+bool perturbation_0_2_v16(const int m_nFractalType, const int m_nPower, const floatexp *m_dxr, const floatexp *m_dxi, const double *m_db_z, int64_t_v16 &antal, double_v16 &test1, double_v16 &test2, int64_t_v16 &bGlitch, const double m_nBailout2, const int nMaxIter, floatexp_v16 &xr, floatexp_v16 &xi, const floatexp_v16 &cr, const floatexp_v16 &ci, int k);
 
 void combo5_addstrings(HWND hWnd, const int combo);
 int validate_power_for_fractal_type(const int m_nFractalType, const int m_nPower);
