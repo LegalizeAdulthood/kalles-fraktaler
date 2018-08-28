@@ -127,6 +127,12 @@ Feedback:
 
 ## Change Log
 
+- **kf-2.12.15** (????-??-??)
+
+    - bugfix: reading PNG metadata works even if it is moved after the image
+      data chunks and has a miscapitalized "Comment" keyword
+    - upgrade to Boost 1.68.0
+
 - **kf-2.12.14** (2018-08-14)
 
     - fix "a single dot appears in the middle of a mini"
