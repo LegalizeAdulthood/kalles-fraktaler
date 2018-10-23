@@ -39,7 +39,6 @@ Feedback:
   image or repeated frame) (reported by gerrit and CFJH)
 - translating location while reuse reference is active leads to bad images
   (reported by Dinkydau)
-- changing "threads per CPU" during rendering crashes (reported by CFJH)
 - with "reuse reference", corrupt image at transition between number types
   (eg e600) (reported by CFJH) - workaround is to render in segments or force
   the number type higher ("use long double always", "use floatexp always")
@@ -133,6 +132,10 @@ Feedback:
 
 - **kf-2.12.15** (????-??-??)
 
+    - bugfix: corrupt image at transition between number types (eg near e600)
+      (reported by CFJH)
+    - bugfix: changing "threads per CPU" during rendering crashes
+      (reported by CFJH) (the menu is now disabled during rendering)
     - bugfix: reading PNG metadata works even if it is moved after the image
       data chunks and has a miscapitalized "Comment" keyword
     - upgrade to Boost 1.68.0
