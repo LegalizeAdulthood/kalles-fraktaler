@@ -138,7 +138,12 @@ Feedback:
       (reported by CFJH) (the menu is now disabled during rendering)
     - bugfix: reading PNG metadata works even if it is moved after the image
       data chunks and has a miscapitalized "Comment" keyword
+    - bugfix: ghc-8.6 compatibility (MonadFail)
+    - bugfix: translation with reuse reference (reported by Dinkydau)
+    - bugfix: don't add secondary references when auto solve glitches is disabled
     - upgrade to Boost 1.68.0
+    - upgrade to MPFR 4.0.1-p13
+    - upgrade to libpng 1.6.35
 
 - **kf-2.12.14** (2018-08-14)
 
