@@ -146,12 +146,13 @@ Feedback:
 
 ## Change Log
 
-- **kf-2.13.11** (????-??-??)
+- **kf-2.13.11** (2018-10-29)
 
     - bugfix: fix translation with reuse reference enabled
       (reported by Dinkydau)
     - bugfix: don't add additional references if autosolve is disabled
     - bugfix: ghc-8.6 compatibility for preprocessor (MonadFail)
+    - upgrade to libpng 1.6.35
 
 - **kf-2.13.10** (2018-10-23)
 
