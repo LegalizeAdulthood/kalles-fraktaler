@@ -130,7 +130,7 @@ Feedback:
 
 ## Change Log
 
-- **kf-2.12.15** (????-??-??)
+- **kf-2.12.15** (2018-10-29)
 
     - bugfix: corrupt image at transition between number types (eg near e600)
       (reported by CFJH)
