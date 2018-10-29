@@ -28,7 +28,7 @@ wget -c http://www.mpfr.org/mpfr-current/mpfr-4.0.1.tar.xz
 wget -c http://www.mpfr.org/mpfr-current/allpatches
 wget -c https://zlib.net/zlib-1.2.11.tar.xz
 wget -c http://jpegclub.org/support/files/jpegsrc.v6b2.tar.gz
-wget -c ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.xz
+wget -c ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.35.tar.xz
 wget -c ftp://ftp.gnu.org/gnu/gsl/gsl-2.5.tar.gz
 cp -avft ~/win32/src *z allpatches
 # gmp 64
