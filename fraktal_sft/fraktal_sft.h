@@ -290,7 +290,6 @@ class CFraktalSFT
 
 	double m_xrd, m_xid;
 
-	floatexp *m_dxr, *m_dxi;
 	floatexp *m_APr;
 	floatexp *m_APi;
 	SeriesR2 *m_APs;
@@ -298,16 +297,17 @@ class CFraktalSFT
 	BOOL m_bMirrored;
 	int m_nFractalType;
 
-	long double *m_ldxr, *m_ldxi;
-
 	double m_nIterDiv;
 	int m_nMaxApproximation;
 	int m_nApprox;
 	RECT m_rApprox;
 
-	double *m_db_dxr;
-	double *m_db_dxi;
-	double *m_db_z;
+	// reference orbit
+	double *m_db_dxr, *m_db_dxi, *m_db_z;
+	long double *m_ldxr, *m_ldxi, *m_ldz;
+	floatexp *m_dxr, *m_dxi, *m_dz;
+	// allocated in type_reference.c
+	void DeleteReferenceOrbit();
 
 	floatexp m_pixel_step_x, m_pixel_step_y;
 	floatexp m_pixel_center_x, m_pixel_center_y;

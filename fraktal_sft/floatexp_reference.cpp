@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <float.h>
 #include "complex.h"
 
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 
 extern double g_real;
 extern double g_imag;
@@ -40,7 +40,7 @@ struct mcthread_common
 	barrier *barrier;
 	mpfr_t xr, xi, xrn, xin, xrn1, xin1, xrxid, xrxid1, sr, si, cr, ci;
 	floatexp *m_dxr, *m_dxi;
-	double *m_db_z, *terminate, *glitch_threshold;
+	double *m_dz, *terminate, *glitch_threshold;
 	int *m_nMaxIter, *m_nGlitchIter, *nMaxIter, *m_nRDone;
 	int *antal;
 	double *test1;
@@ -116,7 +116,7 @@ static DWORD WINAPI mcthreadfunc(mcthread *p0)
 					di = din;
 					old_absval = abs_val;
 					abs_val = (real * lr * lr + imag * li * li).todouble();
-					p->m_db_z[i-1] = abs_val * glitch_threshold;
+					p->m_dz[i-1] = abs_val * glitch_threshold;
 					if (abs_val >= 4)
 					{
 						if (*p->terminate == 4 && !stored)
@@ -170,7 +170,7 @@ static DWORD WINAPI mcthreadfunc(mcthread *p0)
 			di = din;
 			old_absval = abs_val;
 			abs_val = (real * lr * lr + imag * li * li).todouble();
-			p->m_db_z[i-1] = abs_val * glitch_threshold;
+			p->m_dz[i-1] = abs_val * glitch_threshold;
 			if (abs_val >= 4)
 			{
 				if (*p->terminate == 4 && !stored)
@@ -223,16 +223,11 @@ void CFraktalSFT::CalculateReferenceEXP()
 	Precision prec(m_rref.m_f.precision());
 
 	int i;
-	if (m_dxr)
-		delete[] m_dxr;
-	m_dxr = new floatexp[m_nMaxIter];
-	if (m_dxi)
-		delete[] m_dxi;
-	m_dxi = new floatexp[m_nMaxIter];
-	if (m_db_z)
-		delete[] m_db_z;
-	m_db_z = new double [m_nMaxIter];
 
+	DeleteReferenceOrbit();
+	m_dxr = new floatexp [m_nMaxIter];
+	m_dxi = new floatexp [m_nMaxIter];
+	m_dz  = new floatexp [m_nMaxIter];
 
 	floatexp real(g_real);
 	floatexp imag(g_imag);
@@ -280,7 +275,7 @@ void CFraktalSFT::CalculateReferenceEXP()
 		mpfr_set_d(co.xrxid, 0, MPFR_RNDN);
 		co.m_dxr = m_dxr;
 		co.m_dxi = m_dxi;
-		co.m_db_z = m_db_z;
+		co.m_dz = m_dz;
 		co.terminate = &terminate;
 		co.glitch_threshold = &glitch_threshold;
 		co.m_nMaxIter = &m_nMaxIter;
@@ -353,7 +348,7 @@ void CFraktalSFT::CalculateReferenceEXP()
 			m_dxi[i] = xi;
 			old_absval = abs_val;
 			abs_val = (real * m_dxr[i] * m_dxr[i] + imag * m_dxi[i] * m_dxi[i]).todouble();
-			m_db_z[i] = abs_val*threashold;
+			m_dz[i] = abs_val*threashold;
 			if (abs_val >= 4)
 			{
 				if (terminate == 4 && !stored)
@@ -393,12 +388,22 @@ void CFraktalSFT::CalculateReferenceEXP()
 
 		floatexp _x, _y, daa, dab, dba, dbb;
 		GetPixelCoordinates(g_nAddRefX, g_nAddRefY, _x, _y, daa, dab, dba, dbb);
-		dr *= m_fPixelSpacing;
-		di *= m_fPixelSpacing;
-    bool ok = GetDerivatives()
-      ? reference_floatexp(m_nFractalType, m_nPower, m_dxr, m_dxi, m_db_z, m_bStop, m_nRDone, m_nGlitchIter, m_nMaxIter, m_rref, m_iref, g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), antal, test1, test2, dr, di, daa, dab, dba, dbb)
-      : reference_floatexp(m_nFractalType, m_nPower, m_dxr, m_dxi, m_db_z, m_bStop, m_nRDone, m_nGlitchIter, m_nMaxIter, m_rref, m_iref, g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), antal, test1, test2)
-      ;
+		floatexp test1f, test2f;
+		bool ok;
+		if (GetDerivatives())
+		{
+			floatexp dzc[2] = { 0, 0 };
+			floatexp dci[4] = { daa, dab, dba, dbb };
+			ok = current_formula->referenceDfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &m_bStop, &m_nRDone, &m_nGlitchIter, &m_nMaxIter, m_rref.m_f.backend().data(), m_iref.m_f.backend().data(), g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), &antal, &test1f, &test2f, &dzc[0], &dci[0]);
+			dr = dzc[0] * m_fPixelSpacing;
+			di = dzc[1] * m_fPixelSpacing;
+		}
+		else
+		{
+			ok = current_formula->referencefe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &m_bStop, &m_nRDone, &m_nGlitchIter, &m_nMaxIter, m_rref.m_f.backend().data(), m_iref.m_f.backend().data(), g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), &antal, &test1f, &test2f);
+	  }
+	  test1 = test1f.todouble();
+	  test2 = test2f.todouble();
     assert(ok && "reference_floatexp");
 
 	}

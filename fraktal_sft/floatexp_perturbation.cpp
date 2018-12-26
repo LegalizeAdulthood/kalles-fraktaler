@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <float.h>
 #include "complex.h"
 
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 
 BOOL ISFLOATOK(double a);
 extern double g_real;
@@ -103,7 +103,7 @@ void CFraktalSFT::MandelCalcEXP()
 					yi = m_dxi[antal] + Di;
 					test2 = test1;
 					test1 = (real*yr*yr + imag*yi*yi).todouble();
-					if (test1<m_db_z[antal]){
+					if (test1<m_dz[antal]){
 						bGlitch = TRUE;
 						if (! m_bNoGlitchDetection)
 							break;
@@ -138,7 +138,7 @@ void CFraktalSFT::MandelCalcEXP()
 					yi = m_dxi[antal] + Di;
 					test2 = test1;
 					test1 = (real*yr*yr + imag*yi*yi).todouble();
-					if (test1<m_db_z[antal]){
+					if (test1<m_dz[antal]){
 						bGlitch = TRUE;
 						if (! m_bNoGlitchDetection)
 							break;
@@ -170,13 +170,23 @@ void CFraktalSFT::MandelCalcEXP()
     else
     {
 
-			dr *= m_fPixelSpacing;
-			di *= m_fPixelSpacing;
-			bool ok = GetDerivatives()
-			  ? perturbation_floatexp(m_nFractalType, m_nPower, m_dxr, m_dxi, m_db_z, antal, test1, test2, bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, Dr, Di, D0r, D0i, dr, di, m_epsilon, m_fPixelSpacing, daa, dab, dba, dbb)
-			  : perturbation_floatexp(m_nFractalType, m_nPower, m_dxr, m_dxi, m_db_z, antal, test1, test2, bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, Dr, Di, D0r, D0i)
-			  ;
-			assert(ok && "perturbation_floatexp()");
+				floatexp test1f, test2f;
+				bool ok;
+				if (GetDerivatives())
+				{
+					floatexp dzc[2] = { dr, di };
+					floatexp dci[4] = { daa, dab, dba, dbb };
+					ok = current_formula->perturbationDfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &antal, &test1f, &test2f, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, D0r, D0i, &dzc[0], &dci[0]);
+					dr = dzc[0] * m_fPixelSpacing;
+					di = dzc[1] * m_fPixelSpacing;
+				}
+				else
+				{
+					ok = current_formula->perturbationfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &antal, &test1f, &test2f, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, D0r, D0i);
+				}
+				assert(ok && "perturbation_floatexp");
+				test1 = test1f.todouble();
+				test2 = test2f.todouble();
 
 		}
 

@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "fraktal_sft.h"
 #include "complex.h"
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 
 void CFraktalSFT::MandelCalc()
 {
@@ -73,17 +73,17 @@ void CFraktalSFT::MandelCalc()
 						test2 = test1;
 						test1 = g_real*yr*yr + g_imag*yi*yi;
 						if (test1<m_db_z[antal]){
-							long double Xr = m_db_dxr[antal];
-							long double Xi = m_db_dxi[antal];
-							long double xr = ((long double)(Dr)) * m_nScaling;
-							long double xi = ((long double)(Di)) * m_nScaling;
-							long double cr = ((long double)(dbD0r)) * m_nScaling;
-							long double ci = ((long double)(dbD0i)) * m_nScaling;
-							if (type_0_power_2_pixel_has_glitched(cr, ci, xr, xi, Xr, Xi, ldcr, ldci, (long double) (m_epsilon), m_lPixelSpacing)){
+							// FIXME long double Xr = m_db_dxr[antal];
+							// FIXME long double Xi = m_db_dxi[antal];
+							// FIXME long double xr = ((long double)(Dr)) * m_nScaling;
+							// FIXME long double xi = ((long double)(Di)) * m_nScaling;
+							// FIXME long double cr = ((long double)(dbD0r)) * m_nScaling;
+							// FIXME long double ci = ((long double)(dbD0i)) * m_nScaling;
+							// FIXME if (type_0_power_2_pixel_has_glitched(cr, ci, xr, xi, Xr, Xi, ldcr, ldci, (long double) (m_epsilon), m_lPixelSpacing)){
 								bGlitch = TRUE;
 								if (! m_bNoGlitchDetection)
 									break;
-							}
+							// FIXME }
 						}
 						if (test1 > m_nBailout2)
 						{
@@ -274,16 +274,24 @@ void CFraktalSFT::MandelCalc()
 			}
 			else // FIXME matrix derivatives
 			{
+
 				double daa = daa0.todouble();
 				double dab = dab0.todouble();
 				double dba = dba0.todouble();
 				double dbb = dbb0.todouble();
-				dr *= m_dPixelSpacing;
-				di *= m_dPixelSpacing;
-				bool ok = GetDerivatives()
-				  ? perturbation_double(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, antal, test1, test2, bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, Dr, Di, dbD0r, dbD0i, dr, di, m_epsilon, m_dPixelSpacing, daa, dab, dba, dbb)
-				  : perturbation_double(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, antal, test1, test2, bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, Dr, Di, dbD0r, dbD0i)
-				  ;
+				bool ok;
+				if (GetDerivatives())
+				{
+					double dzc[2] = { dr, di };
+					double dci[4] = { daa, dab, dba, dbb };
+					ok = current_formula->perturbationD(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, &antal, &test1, &test2, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, dbD0r, dbD0i, &dzc[0], &dci[0]);
+					dr = dzc[0] * m_dPixelSpacing;
+					di = dzc[1] * m_dPixelSpacing;
+				}
+				else
+				{
+					ok = current_formula->perturbation(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, &antal, &test1, &test2, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, dbD0r, dbD0i);
+				}
 				assert(ok && "perturbation_double");
 
 			}

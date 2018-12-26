@@ -458,12 +458,27 @@ public:
 	}
 };
 
+inline floatexp operator*(long double a, floatexp b)
+{
+	return floatexp(a) * b;
+}
+
+inline floatexp operator*(floatexp b, long double a)
+{
+	return floatexp(a) * b;
+}
+
 inline floatexp operator*(double a, floatexp b)
 {
 	return floatexp(a) * b;
 }
 
 inline floatexp operator*(floatexp b, double a)
+{
+	return floatexp(a) * b;
+}
+
+inline floatexp operator*(floatexp b, int a)
 {
 	return floatexp(a) * b;
 }
@@ -481,6 +496,16 @@ inline floatexp operator+(floatexp b, double a)
 inline floatexp operator*(int a, floatexp b)
 {
 	return double(a) * b;
+}
+
+inline floatexp operator/(int a, floatexp b)
+{
+	return floatexp(a) / b;
+}
+
+inline floatexp operator/(double a, floatexp b)
+{
+	return floatexp(a) / b;
 }
 
 inline floatexp abs(floatexp a)
@@ -501,31 +526,31 @@ inline floatexp log(floatexp a)
 	return floatexp(std::log(a.val) + std::log(2.0) * a.exp);
 }
 
-inline floatexp mpfr_get_fe(const mpfr_t value)
+inline floatexp mpfr_get_fe(const mpfr_t value, mpfr_rnd_t rnd = MPFR_RNDN)
 {
 	signed long int e = 0;
-	double l = mpfr_get_d_2exp(&e, value, MPFR_RNDN);
+	double l = mpfr_get_d_2exp(&e, value, rnd);
 	return floatexp(l, e);
 }
 
-inline void mpfr_set_fe(mpfr_t value, floatexp fe)
+inline void mpfr_set_fe(mpfr_t value, floatexp fe, mpfr_rnd_t rnd = MPFR_RNDN)
 {
-	mpfr_set_d(value, fe.val, MPFR_RNDN);
+	mpfr_set_d(value, fe.val, rnd);
 	if (fe.exp >= 0)
 	{
-		mpfr_mul_2ui(value, value, fe.exp, MPFR_RNDN);
+		mpfr_mul_2ui(value, value, fe.exp, rnd);
 	}
 	else
 	{
-		mpfr_div_2ui(value, value, -fe.exp, MPFR_RNDN);
+		mpfr_div_2ui(value, value, -fe.exp, rnd);
 	}
 }
 
-inline long double mpfr_get_ld(const mpfr_t value)
+inline long double mpfr_get_ld(const mpfr_t value, mpfr_rnd_t rnd = MPFR_RNDN)
 {
 	using std::ldexp;
 	signed long int e = 0;
-	long double l = mpfr_get_ld_2exp(&e, value, MPFR_RNDN);
+	long double l = mpfr_get_ld_2exp(&e, value, rnd);
 	if (l == 0.0L)
 		return 0.0L;
 	if (e >= INT_MAX)
@@ -534,6 +559,128 @@ inline long double mpfr_get_ld(const mpfr_t value)
 		return l * 0.0L;
 	l = ldexp(l, e);
 	return l;
+}
+
+inline bool operator>=(const floatexp &a, const floatexp &b)
+{
+	return b <= a;
+}
+
+inline bool operator!=(const floatexp &a, const floatexp &b)
+{
+	return a.val != b.val || a.exp != b.exp;
+}
+
+
+inline bool operator<(int a, const floatexp &b)
+{
+	return floatexp(a) < b;
+}
+
+inline bool operator<=(int a, const floatexp &b)
+{
+	return floatexp(a) <= b;
+}
+
+inline bool operator==(int a, const floatexp &b)
+{
+	return floatexp(a) == b;
+}
+
+inline bool operator>(int a, const floatexp &b)
+{
+	return floatexp(a) > b;
+}
+
+inline bool operator>=(int a, const floatexp &b)
+{
+	return floatexp(a) >= b;
+}
+
+inline bool operator!=(int a, const floatexp &b)
+{
+	return floatexp(a) != b;
+}
+
+inline bool operator<(const floatexp &a, int b)
+{
+	return a < floatexp(b);
+}
+
+inline bool operator==(const floatexp &a, int b)
+{
+	return a == floatexp(b);
+}
+
+inline bool operator>(const floatexp &a, int b)
+{
+	return a > floatexp(b);
+}
+
+inline bool operator>=(const floatexp &a, int b)
+{
+	return a >= floatexp(b);
+}
+
+inline bool operator!=(const floatexp &a, int b)
+{
+	return a != floatexp(b);
+}
+
+inline int sgn(float a)
+{
+	return (a >= 0) - (a < 0);
+}
+
+inline int sgn(double a)
+{
+	return (a >= 0) - (a < 0);
+}
+
+inline int sgn(long double a)
+{
+	return (a >= 0) - (a < 0);
+}
+
+inline int sgn(const floatexp &a)
+{
+	return sgn(a.val);
+}
+
+inline float diffabs(float c, float d) {
+  if (c >= 0.0f) {
+    if (c + d >= 0.0f) { return d; }
+    else { return -(2.0f * c + d); }
+  } else {
+    if (c + d > 0.0f) { return 2.0f * c + d; }
+    else { return -d; }
+  }
+}
+
+inline double diffabs(double c, double d) {
+  if (c >= 0.0) {
+    if (c + d >= 0.0) { return d; }
+    else { return -(2.0 * c + d); }
+  } else {
+    if (c + d > 0.0) { return 2.0 * c + d; }
+    else { return -d; }
+  }
+}
+
+inline long double diffabs(long double c, long double d) {
+  if (c >= 0.0L) {
+    if (c + d >= 0.0L) { return d; }
+    else { return -(2.0L * c + d); }
+  } else {
+    if (c + d > 0.0L) { return 2.0L * c + d; }
+    else { return -d; }
+  }
+}
+
+inline floatexp diffabs(const floatexp &c, const floatexp &d)
+{
+  if (c.val >= 0) if ((c + d).val >= 0) return d; else return -(c.mul2() + d);
+  else if ((c + d).val > 0) return c.mul2() + d; else return -d;
 }
 
 #endif

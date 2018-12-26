@@ -28,8 +28,7 @@ make clean
 
 SRC="kf-${VERSION}-src"
 mkdir "${SRC}"
-make formula/formula.cpp
-cp -avit "${SRC}/" fraktal_sft formula cl common utils preprocessor.hs Makefile 32.mk 64.mk README.md LICENSE.md prepare.sh "${0}"
+cp -avit "${SRC}/" fraktal_sft formula cl common utils Makefile 32.mk 64.mk README.md LICENSE.md prepare.sh "${0}"
 zip -0 -r "${SRC}.zip" "${SRC}/"
 BIN="kf-${VERSION}"
 mkdir "${BIN}"

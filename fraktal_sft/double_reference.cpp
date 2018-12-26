@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "fraktal_sft.h"
 #include "complex.h"
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 
 bool reference_double_0_2_ld(const int m_nFractalType, const int m_nPower, double *m_db_dxr, double *m_db_dxi, double *m_db_z, int &m_bStop, int &m_nRDone, int &m_nGlitchIter, int &m_nMaxIter, const CFixedFloat &Cr0, const CFixedFloat &Ci0, const double g_SeedR, const double g_SeedI, const double g_FactorAR, const double g_FactorAI, const double terminate, const double g_real, const double g_imag, const bool m_bGlitchLowTolerance, int &antal, double &test1, double &test2, long double &dr0, long double &di0)
 {
@@ -268,15 +268,11 @@ void CFraktalSFT::CalculateReference()
 	Precision prec(m_rref.m_f.precision());
 
 	int i;
-	if (m_db_dxr)
-		delete[] m_db_dxr;
+
+	DeleteReferenceOrbit();
 	m_db_dxr = new double [m_nMaxIter];
-	if (m_db_dxi)
-		delete[] m_db_dxi;
 	m_db_dxi = new double [m_nMaxIter];
-	if (m_db_z)
-		delete[] m_db_z;
-	m_db_z = new double [m_nMaxIter];
+	m_db_z   = new double [m_nMaxIter];
 
 	CFixedFloat xr = g_SeedR, xi = g_SeedI, xin, xrn, sr = xr.Square(), si = xi.Square(), xrxid = 0;
 	double terminate = SMOOTH_BAILOUT*SMOOTH_BAILOUT;
@@ -379,12 +375,19 @@ void CFraktalSFT::CalculateReference()
 		double ddab = dab.todouble();
 		double ddba = dba.todouble();
 		double ddbb = dbb.todouble();
-		dr *= m_dPixelSpacing;
-		di *= m_dPixelSpacing;
-		bool ok = GetDerivatives()
-		  ? reference_double(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, m_bStop, m_nRDone, m_nGlitchIter, m_nMaxIter, m_rref, m_iref, g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), antal, test1, test2, dr, di, ddaa, ddab, ddba, ddbb)
-		  : reference_double(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, m_bStop, m_nRDone, m_nGlitchIter, m_nMaxIter, m_rref, m_iref, g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), antal, test1, test2)
-		  ;
+		bool ok;
+		if (GetDerivatives())
+		{
+			double dzc[2] = { 0, 0 };
+			double dci[4] = { ddaa, ddab, ddba, ddbb };
+			ok = current_formula->referenceD(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, &m_bStop, &m_nRDone, &m_nGlitchIter, &m_nMaxIter, m_rref.m_f.backend().data(), m_iref.m_f.backend().data(), g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), &antal, &test1, &test2, &dzc[0], &dci[0]);
+			dr = dzc[0] * m_dPixelSpacing;
+			di = dzc[1] * m_dPixelSpacing;
+		}
+		else
+		{
+			ok = current_formula->reference(m_nFractalType, m_nPower, m_db_dxr, m_db_dxi, m_db_z, &m_bStop, &m_nRDone, &m_nGlitchIter, &m_nMaxIter, m_rref.m_f.backend().data(), m_iref.m_f.backend().data(), g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), &antal, &test1, &test2);
+	  }
 		assert(ok && "reference_double");
 
 	}

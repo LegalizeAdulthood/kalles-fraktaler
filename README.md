@@ -175,6 +175,9 @@ Feedback:
     - new feature: nanomb1 algorithm for power 2 Mandelbrot (experimental)
       (originally by knighty) (not quite as experimental as nanomb2, suggested
       by gerrit, requires exact period to be set by Newton or location dialog)
+    - new formulas: Simon.Snake's "Mothbrot" and variations (combination of
+      Mandelbrot and Burning Ship)
+    - bugfix: improved appearance during rendering (final images still the same)
 
 - **kf-2.14.3** (2018-10-29)
 

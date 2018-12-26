@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <float.h>
 #include "complex.h"
 
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 
 extern double g_real;
 extern double g_imag;
@@ -40,7 +40,7 @@ struct mcthread_common
 	barrier *barrier;
 	mpfr_t xr, xi, xrn, xin, xrn1, xin1, xrxid, xrxid1, sr, si, cr, ci;
 	long double *m_ldxr, *m_ldxi;
-	double *m_db_z, *terminate, *glitch_threshold;
+	long double *m_ldz, *terminate, *glitch_threshold;
 	int *m_nMaxIter, *m_nGlitchIter, *nMaxIter, *m_nRDone;
 	int *antal;
 	double *test1;
@@ -115,7 +115,7 @@ static DWORD WINAPI mcthreadfunc(mcthread *p0)
 					di = din;
 					old_absval = abs_val;
 					abs_val = g_real * lr * lr + g_imag * li * li;
-					p->m_db_z[i-1] = abs_val * glitch_threshold;
+					p->m_ldz[i-1] = abs_val * glitch_threshold;
 					if (abs_val >= 4)
 					{
 						if (*p->terminate == 4 && !stored)
@@ -169,7 +169,7 @@ static DWORD WINAPI mcthreadfunc(mcthread *p0)
 			di = din;
 			old_absval = abs_val;
 			abs_val = g_real * lr * lr + g_imag * li * li;
-			p->m_db_z[i-1] = abs_val * glitch_threshold;
+			p->m_ldz[i-1] = abs_val * glitch_threshold;
 			if (abs_val >= 4)
 			{
 				if (*p->terminate == 4 && !stored)
@@ -221,15 +221,11 @@ void CFraktalSFT::CalculateReferenceLDBL()
 	Precision prec(m_rref.m_f.precision());
 
 	int i;
-	if (m_ldxr)
-		delete[] m_ldxr;
-	m_ldxr = new long double[m_nMaxIter];
-	if (m_ldxi)
-		delete[] m_ldxi;
-	m_ldxi = new long double[m_nMaxIter];
-	if (m_db_z)
-		delete[] m_db_z;
-	m_db_z = new double [m_nMaxIter];
+
+	DeleteReferenceOrbit();
+	m_ldxr = new long double [m_nMaxIter];
+	m_ldxi = new long double [m_nMaxIter];
+	m_ldz  = new long double [m_nMaxIter];
 
 	int antal = 0;
 	double test1 = 0;
@@ -275,7 +271,7 @@ void CFraktalSFT::CalculateReferenceLDBL()
 		mpfr_set_d(co.xrxid, 0, MPFR_RNDN);
 		co.m_ldxr = m_ldxr;
 		co.m_ldxi = m_ldxi;
-		co.m_db_z = m_db_z;
+		co.m_ldz = m_ldz;
 		co.terminate = &terminate;
 		co.glitch_threshold = &glitch_threshold;
 		co.m_nMaxIter = &m_nMaxIter;
@@ -350,7 +346,7 @@ void CFraktalSFT::CalculateReferenceLDBL()
 			m_ldxi[i] = mpfr_get_ld(xi.m_f.backend().data(), MPFR_RNDN);
 			old_absval = abs_val;
 			abs_val = g_real * m_ldxr[i] * m_ldxr[i] + g_imag * m_ldxi[i] * m_ldxi[i];
-			m_db_z[i] = abs_val*threashold;
+			m_ldz[i] = abs_val*threashold;
 			if (abs_val >= 4)
 			{
 				if (terminate == 4 && !stored)
@@ -393,12 +389,22 @@ void CFraktalSFT::CalculateReferenceLDBL()
 		long double ldab = dab.toLongDouble();
 		long double ldba = dba.toLongDouble();
 		long double ldbb = dbb.toLongDouble();
-		dr *= m_lPixelSpacing;
-		di *= m_lPixelSpacing;
-		bool ok = GetDerivatives()
-		  ? reference_long_double(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_db_z, m_bStop, m_nRDone, m_nGlitchIter, m_nMaxIter, m_rref, m_iref, g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), antal, test1, test2, dr, di, ldaa, ldab, ldba, ldbb)
-		  : reference_long_double(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_db_z, m_bStop, m_nRDone, m_nGlitchIter, m_nMaxIter, m_rref, m_iref, g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), antal, test1, test2)
-		  ;
+		long double test1f, test2f;
+		bool ok;
+		if (GetDerivatives())
+		{
+			long double dzc[2] = { 0, 0 };
+			long double dci[4] = { ldaa, ldab, ldba, ldbb };
+			ok = current_formula->referenceDl(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_ldz, &m_bStop, &m_nRDone, &m_nGlitchIter, &m_nMaxIter, m_rref.m_f.backend().data(), m_iref.m_f.backend().data(), g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), &antal, &test1f, &test2f, &dzc[0], &dci[0]);
+			dr = dzc[0] * m_lPixelSpacing;
+			di = dzc[1] * m_lPixelSpacing;
+		}
+		else
+		{
+			ok = current_formula->referencel(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_ldz, &m_bStop, &m_nRDone, &m_nGlitchIter, &m_nMaxIter, m_rref.m_f.backend().data(), m_iref.m_f.backend().data(), g_SeedR, g_SeedI, g_FactorAR, g_FactorAI, terminate, g_real, g_imag, GetGlitchLowTolerance(), &antal, &test1f, &test2f);
+	  }
+	  test1 = test1f;
+	  test2 = test2f;
     assert(ok && "reference_long_double");
 
 	}

@@ -20,9 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "fraktal_sft.h"
 #include "floatexp.h"
 #include "complex.h"
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 
-static int Perturbation_Var(int antal,const long double *dxr,const long double *dxi, long double Dr, long double Di, long double D0r, long double D0i,double &test1, double &test2, int m_nBailout2, int m_nMaxIter,const double *m_db_z,BOOL &bGlitch,int m_nPower,const int *m_pnExpConsts, const bool m_bNoGlitchDetection)
+static int Perturbation_Var(int antal,const long double *dxr,const long double *dxi, long double Dr, long double Di, long double D0r, long double D0i,double &test1, double &test2, int m_nBailout2, int m_nMaxIter,const long double *m_ldz,BOOL &bGlitch,int m_nPower,const int *m_pnExpConsts, const bool m_bNoGlitchDetection)
 {
   long double yr, yi;
   bGlitch=FALSE;
@@ -32,7 +32,7 @@ static int Perturbation_Var(int antal,const long double *dxr,const long double *
       yi=dxi[antal]+Di;
       test2=test1;
       test1 = g_real*yr*yr + g_imag*yi*yi;
-      if(test1<m_db_z[antal]){
+      if(test1<m_ldz[antal]){
         bGlitch=TRUE;
         if (! m_bNoGlitchDetection)
           break;
@@ -57,7 +57,7 @@ static int Perturbation_Var(int antal,const long double *dxr,const long double *
   return antal;
 }
 
-static int Perturbation_Var(int antal,const long double *dxr,const long double *dxi, long double Dr, long double Di, long double D0r, long double D0i,double &test1, double &test2, int m_nBailout2, int m_nMaxIter,const double *m_db_z,BOOL &bGlitch,int m_nPower,const int *m_pnExpConsts, long double &dr, long double &di, const bool m_bNoGlitchDetection)
+static int Perturbation_Var(int antal,const long double *dxr,const long double *dxi, long double Dr, long double Di, long double D0r, long double D0i,double &test1, double &test2, int m_nBailout2, int m_nMaxIter,const long double *m_ldz,BOOL &bGlitch,int m_nPower,const int *m_pnExpConsts, long double &dr, long double &di, const bool m_bNoGlitchDetection)
 {
   complex<long double> d(dr, di);
   long double yr, yi;
@@ -68,7 +68,7 @@ static int Perturbation_Var(int antal,const long double *dxr,const long double *
       yi=dxi[antal]+Di;
       test2=test1;
       test1 = g_real*yr*yr + g_imag*yi*yi;
-      if(test1<m_db_z[antal]){
+      if(test1<m_ldz[antal]){
         bGlitch=TRUE;
         if (! m_bNoGlitchDetection)
           break;
@@ -149,18 +149,18 @@ void CFraktalSFT::MandelCalcLDBL()
 						double yi = m_ldxi[antal] + Di*m_nScalingL;
 						test2 = test1;
 						test1 = g_real*yr*yr + g_imag*yi*yi;
-						if (test1<m_db_z[antal]){
+						if (test1<m_ldz[antal]){
 							floatexp Xr(m_ldxr[antal]);
 							floatexp Xi(m_ldxi[antal]);
-							floatexp xr = (floatexp(Dr)) * m_nScalingL;
-							floatexp xi = (floatexp(Di)) * m_nScalingL;
-							floatexp cr = (floatexp(lD0r)) * m_nScalingL;
-							floatexp ci = (floatexp(lD0i)) * m_nScalingL;
-							if (type_0_power_2_pixel_has_glitched(cr, ci, xr, xi, Xr, Xi, ldcr, ldci, floatexp(m_epsilon), m_fPixelSpacing)){
+							// FIXME floatexp xr = (floatexp(Dr)) * m_nScalingL;
+							// FIXME floatexp xi = (floatexp(Di)) * m_nScalingL;
+							// FIXME floatexp cr = (floatexp(lD0r)) * m_nScalingL;
+							// FIXME floatexp ci = (floatexp(lD0i)) * m_nScalingL;
+							// FIXME if (type_0_power_2_pixel_has_glitched(cr, ci, xr, xi, Xr, Xi, ldcr, ldci, floatexp(m_epsilon), m_fPixelSpacing)){
 								bGlitch = TRUE;
 								if (! m_bNoGlitchDetection)
 									break;
-							}
+							// FIXME }
 							bGlitch = TRUE;
 							if (! m_bNoGlitchDetection)
 								break;
@@ -186,7 +186,7 @@ void CFraktalSFT::MandelCalcLDBL()
 						double yi = m_ldxi[antal] + Di*m_nScalingL;
 						test2 = test1;
 						test1 = g_real*yr*yr + g_imag*yi*yi;
-						if (test1<m_db_z[antal]){
+						if (test1<m_ldz[antal]){
 							bGlitch = TRUE;
 							if (! m_bNoGlitchDetection)
 								break;
@@ -212,7 +212,7 @@ void CFraktalSFT::MandelCalcLDBL()
 						double yi = m_ldxi[antal] + Di*m_nScalingL;
 						test2 = test1;
 						test1 = g_real*yr*yr + g_imag*yi*yi;
-						if (test1<m_db_z[antal]){
+						if (test1<m_ldz[antal]){
 							bGlitch = TRUE;
 							if (! m_bNoGlitchDetection)
 								break;
@@ -240,7 +240,7 @@ void CFraktalSFT::MandelCalcLDBL()
 						double yi = m_ldxi[antal] + Di*m_nScalingL;
 						test2 = test1;
 						test1 = g_real*yr*yr + g_imag*yi*yi;
-						if (test1<m_db_z[antal]){
+						if (test1<m_ldz[antal]){
 							bGlitch = TRUE;
 							if (! m_bNoGlitchDetection)
 								break;
@@ -272,8 +272,8 @@ void CFraktalSFT::MandelCalcLDBL()
 			long double Di = TDni.toLongDouble();
 			// FIXME check this is still ok around long double vs scaled double zoom threshold e600
 			antal = GetDerivatives()
-			  ? Perturbation_Var(antal, m_ldxr, m_ldxi, Dr, Di, lD0r, lD0i, test1, test2, m_nBailout2, nMaxIter, m_db_z, bGlitch, m_nPower, m_pnExpConsts, dr, di, m_bNoGlitchDetection)
-			  : Perturbation_Var(antal, m_ldxr, m_ldxi, Dr, Di, lD0r, lD0i, test1, test2, m_nBailout2, nMaxIter, m_db_z, bGlitch, m_nPower, m_pnExpConsts, m_bNoGlitchDetection)
+			  ? Perturbation_Var(antal, m_ldxr, m_ldxi, Dr, Di, lD0r, lD0i, test1, test2, m_nBailout2, nMaxIter, m_ldz, bGlitch, m_nPower, m_pnExpConsts, dr, di, m_bNoGlitchDetection)
+			  : Perturbation_Var(antal, m_ldxr, m_ldxi, Dr, Di, lD0r, lD0i, test1, test2, m_nBailout2, nMaxIter, m_ldz, bGlitch, m_nPower, m_pnExpConsts, m_bNoGlitchDetection)
 			  ;
 			long double pixel_spacing = m_lPixelSpacing;
 			dr *= pixel_spacing;
@@ -281,6 +281,7 @@ void CFraktalSFT::MandelCalcLDBL()
 		}
 		else
 		{
+
 			dr = TDDnr.toLongDouble();
 			di = TDDni.toLongDouble();
 			long double lD0r = D0r.toLongDouble();
@@ -291,15 +292,24 @@ void CFraktalSFT::MandelCalcLDBL()
 			long double ldab = dab.toLongDouble();
 			long double ldba = dba.toLongDouble();
 			long double ldbb = dbb.toLongDouble();
-			int antal2 = antal;
-			dr *= m_lPixelSpacing;
-			di *= m_lPixelSpacing;
-			bool ok = GetDerivatives()
-			  ? perturbation_long_double(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_db_z, antal2, test1, test2, bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, Dr, Di, lD0r, lD0i, dr, di, m_epsilon, m_lPixelSpacing, ldaa, ldab, ldba, ldbb)
-			  : perturbation_long_double(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_db_z, antal2, test1, test2, bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, Dr, Di, lD0r, lD0i)
-			  ;
-			antal = antal2;
-			assert(ok && "perturbation_long_double");
+			long double test1f, test2f;
+			bool ok;
+			if (GetDerivatives())
+			{
+				long double dzc[2] = { dr, di };
+				long double dci[4] = { ldaa, ldab, ldba, ldbb };
+				ok = current_formula->perturbationDl(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_ldz, &antal, &test1f, &test2f, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, lD0r, lD0i, &dzc[0], &dci[0]);
+				dr = dzc[0] * m_lPixelSpacing;
+				di = dzc[1] * m_lPixelSpacing;
+			}
+			else
+			{
+				ok = current_formula->perturbationl(m_nFractalType, m_nPower, m_ldxr, m_ldxi, m_ldz, &antal, &test1f, &test2f, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, lD0r, lD0i);
+			}
+			assert(ok && "perturbation_floatexp");
+			test1 = test1f;
+			test2 = test2f;
+
 		}
 
 		double de = GetDerivatives()
