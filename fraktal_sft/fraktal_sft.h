@@ -36,6 +36,7 @@ extern std::vector<cldevice> cldevices;
 
 struct NanoMB1_Reference;
 struct NanoMB2_Reference;
+struct formula;
 
 struct CPixel;
 class CPixels
@@ -392,6 +393,10 @@ class CFraktalSFT
 	std::vector<std::string> m_redo;
 
 public:
+
+  const formula *current_formula;
+  void update_current_formula(void);
+
 	BOOL m_bRunning;
 	BOOL m_bInhibitColouring;
 	bool m_bInteractive;

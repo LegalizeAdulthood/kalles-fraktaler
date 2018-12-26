@@ -37,16 +37,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #undef abs
 #undef sgn
 
-static const struct formula *get_formula(int type, int power)
-{
-  std::string name = "formula_" + std::to_string(type) + "_" + std::to_string(power);
-  const struct formula *f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());
-  if (f) return f;
-  name = "formula_" + std::to_string(type);
-  f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());
-  return f;
-}
-
 extern CFraktalSFT g_SFT;
 extern HICON g_hIcon;
 
@@ -677,9 +667,7 @@ int g_period = 0;
 
 static int WINAPI ThSkew(HWND hWnd)
 {
-  const int type = g_SFT.GetFractalType();
-  const int power = g_SFT.GetPower();
-  const struct formula *f = get_formula(type, power);
+  const struct formula *f = g_SFT.current_formula;
 
   const int iters = g_SFT.GetIterations();
   g_szRe = g_SFT.GetRe();
@@ -715,7 +703,7 @@ static int WINAPI ThNewton(HWND hWnd)
 {
   const int type = g_SFT.GetFractalType();
   const int power = g_SFT.GetPower();
-  const struct formula *f = get_formula(type, power);
+  const struct formula *f = g_SFT.current_formula;
   g_skew[0] = 1;
   g_skew[1] = 0;
   g_skew[2] = 0;

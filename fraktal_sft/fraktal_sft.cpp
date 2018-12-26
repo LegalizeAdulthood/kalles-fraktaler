@@ -2655,6 +2655,7 @@ void CFraktalSFT::SetPower(int nPower)
 		else
 			g_nLDBL = LONG_DOUBLE_THRESHOLD_DEFAULT;
 	}
+  update_current_formula();
 }
 
 void CFraktalSFT::SetDifferences(int nDifferences)
@@ -2788,6 +2789,8 @@ void CFraktalSFT::SetFractalType(int nFractalType)
 		else
 			g_nLDBL = LONG_DOUBLE_THRESHOLD_DEFAULT;
 	}
+
+  update_current_formula();
 }
 int CFraktalSFT::GetFractalType()
 {
@@ -3318,4 +3321,16 @@ void CFraktalSFT::GetPixelCoordinates(const int i, const int j, floatexp &x, flo
 	dab =  m_S * m_pixel_step_y;
 	dba = -m_S * m_pixel_step_x;
 	dbb =  m_C * m_pixel_step_y;
+}
+
+extern "C" struct formula formula_0_2;
+void CFraktalSFT::update_current_formula(void)
+{
+  std::string name = "formula_" + std::to_string(m_nFractalType) + "_" + std::to_string(m_nPower);
+  const struct formula *f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());
+  if (f) { current_formula = f; return; }
+  name = "formula_" + std::to_string(m_nFractalType);
+  f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());  return;
+  if (f) { current_formula = f; return; }
+  current_formula = &formula_0_2;
 }
