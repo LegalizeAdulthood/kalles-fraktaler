@@ -23,7 +23,7 @@ include $(SYSTEM).mk
 FLAGS := -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -Wno-unused-function -pipe -MMD -g -O3 -ffast-math -I$(WINPREFIX)/include -D_FILE_OFFSET_BITS=64 -D_DEFAULT_SOURCE
 # -I$(CLEWPREFIX)/include -Dclew_STATIC -DKF_OPENCL
 COMPILE_FLAGS := -xc++ -std=c++17 $(FLAGS)
-COMPILE_C_FLAGS := -xc -std=c11 $(FLAGS) -fno-var-tracking-assignments
+COMPILE_C_FLAGS := -xc -std=c11 $(FLAGS) -Ofast -fassociative-math -funsafe-math-optimizations -ffinite-math-only -fno-var-tracking-assignment
 LINK_FLAGS := -static-libgcc -static-libstdc++ -Wl,--stack,67108864 -Wl,-subsystem,windows -L$(WINPREFIX)/lib -ffast-math
 LIBS := -lgdi32 -lcomdlg32 -lole32 -loleaut32 -lcomctl32 -lwininet -lurlmon -luuid -lmpfr -lgmp -ljpeg -ltiff $(WINPREFIX)/lib/libpng16.a -lz -lgsl -lgslcblas
 

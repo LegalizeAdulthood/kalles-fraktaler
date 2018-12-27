@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 void CFraktalSFT::MandelCalc()
 {
 	m_bIterChanged = TRUE;
-	double Dnr, Dni, yr, yi, dr, di;
+	double Dnr, Dni, yr, yi, dr = 0, di = 0;
 	long double ldr = 0, ldi = 0;
 	int antal, x, y, w, h;
 
