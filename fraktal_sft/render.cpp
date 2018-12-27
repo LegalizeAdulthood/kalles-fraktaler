@@ -101,6 +101,7 @@ void CFraktalSFT::RenderFractal(int nX, int nY, int nMaxIter, HWND hWnd, BOOL bN
 		std::cerr << "RenderFractal() slept for " << counter << "ms" << std::endl;
 #endif
 	m_bStop = FALSE;
+	update_current_formula();
 	if (hWnd)
 		m_hWnd = hWnd;
 	m_nX = nX;
@@ -186,9 +187,9 @@ void CFraktalSFT::RenderFractal(int nX, int nY, int nMaxIter, HWND hWnd, BOOL bN
 	ReleaseMutex(m_hMutex);
 
 	CFixedFloat pixel_spacing = (m_istop - m_istart) / m_nY;
-	m_fPixelSpacing = pixel_spacing;
-	m_dPixelSpacing = m_fPixelSpacing.todouble();
-	m_lPixelSpacing = m_fPixelSpacing.toLongDouble();
+	m_fPixelSpacing = floatexp(pixel_spacing);
+	m_dPixelSpacing = double(m_fPixelSpacing);
+	m_lPixelSpacing = (long double) m_fPixelSpacing;
 
 	if (bNoThread){
 		if (m_hWnd)
@@ -253,22 +254,6 @@ void CFraktalSFT::RenderFractal()
 		return;
 	}
 	else if (m_nZoom>=g_nLDBL && g_LDBL && m_nZoom <= g_nEXP && m_nPower<8){// && !(m_nFractalType==1 && m_nPower==3)){
-		if (m_db_dxr){
-			delete[] m_db_dxr;
-			m_db_dxr = NULL;
-		}
-		if (m_db_dxi){
-			delete[] m_db_dxi;
-			m_db_dxi = NULL;
-		}
-		if (m_dxr){
-			delete[] m_dxr;
-			m_dxr = NULL;
-		}
-		if (m_dxi){
-			delete[] m_dxi;
-			m_dxi = NULL;
-		}
 #ifdef KF_OPENCL
 		if (cl)
 		{
@@ -282,22 +267,6 @@ void CFraktalSFT::RenderFractal()
 		return;
 	}
 	else if (m_nZoom>=g_nLDBL){
-		if (m_db_dxr){
-			delete[] m_db_dxr;
-			m_db_dxr = NULL;
-		}
-		if (m_db_dxi){
-			delete[] m_db_dxi;
-			m_db_dxi = NULL;
-		}
-		if (m_ldxr){
-			delete[] m_ldxr;
-			m_ldxr = NULL;
-		}
-		if (m_ldxi){
-			delete[] m_ldxi;
-			m_ldxi = NULL;
-		}
 #ifdef KF_OPENCL
 		if (cl)
 		{
@@ -309,22 +278,6 @@ void CFraktalSFT::RenderFractal()
 			RenderFractalEXP();
 		}
 		return;
-	}
-	if (m_ldxr){
-		delete[] m_ldxr;
-		m_ldxr = NULL;
-	}
-	if (m_ldxi){
-		delete[] m_ldxi;
-		m_ldxi = NULL;
-	}
-	if (m_dxr){
-		delete[] m_dxr;
-		m_dxr = NULL;
-	}
-	if (m_dxi){
-		delete[] m_dxi;
-		m_dxi = NULL;
 	}
 	m_P.Init(m_nX, m_nY, m_bInteractive);
 	int i;
@@ -353,11 +306,11 @@ void CFraktalSFT::RenderFractal()
 	}
 
 	CFixedFloat step = (m_rstop - m_rstart)*(1 / (double)m_nX);
-	m_pixel_step_x = step;
-	m_pixel_center_x = m_rstart + (m_nX/2) * step - m_rref;
+	m_pixel_step_x = floatexp(step);
+	m_pixel_center_x = floatexp(m_rstart + (m_nX/2) * step - m_rref);
 	step = (m_istop - m_istart)*(1 / (double)m_nY);
-	m_pixel_step_y = step;
-	m_pixel_center_y = m_istart + (m_nY/2) * step - m_iref;
+	m_pixel_step_y = floatexp(step);
+	m_pixel_center_y = floatexp(m_istart + (m_nY/2) * step - m_iref);
 
 	m_rApprox.left = 0;
 	m_rApprox.top = 0;
@@ -484,11 +437,11 @@ void CFraktalSFT::RenderFractalLDBL()
 	}
 
 	CFixedFloat step = (m_rstop - m_rstart)*(1 / (double)m_nX);
-	m_pixel_step_x = step;
-	m_pixel_center_x = m_rstart + (m_nX/2) * step - m_rref;
+	m_pixel_step_x = floatexp(step);
+	m_pixel_center_x = floatexp(m_rstart + (m_nX/2) * step - m_rref);
 	step = (m_istop - m_istart)*(1 / (double)m_nY);
-	m_pixel_step_y = step;
-	m_pixel_center_y = m_istart + (m_nY/2) * step - m_iref;
+	m_pixel_step_y = floatexp(step);
+	m_pixel_center_y = floatexp(m_istart + (m_nY/2) * step - m_iref);
 
 	m_rApprox.left = 0;
 	m_rApprox.top = 0;
@@ -573,11 +526,11 @@ void CFraktalSFT::RenderFractalEXP()
 	int i;
 
 	CFixedFloat step = (m_rstop - m_rstart)*(1 / (double)m_nX);
-	m_pixel_step_x = step;
-	m_pixel_center_x = m_rstart + (m_nX/2) * step - m_rref;
+	m_pixel_step_x = floatexp(step);
+	m_pixel_center_x = floatexp(m_rstart + (m_nX/2) * step - m_rref);
 	step = (m_istop - m_istart)*(1 / (double)m_nY);
-	m_pixel_step_y = step;
-	m_pixel_center_y = m_istart + (m_nY/2) * step - m_iref;
+	m_pixel_step_y = floatexp(step);
+	m_pixel_center_y = floatexp(m_istart + (m_nY/2) * step - m_iref);
 
 	m_rApprox.left = 0;
 	m_rApprox.top = 0;
@@ -653,11 +606,11 @@ void CFraktalSFT::RenderFractalNANOMB1()
 	}
 	int i;
 	CFixedFloat step = (m_rstop - m_rstart)*(1 / (double)m_nX);
-	m_pixel_step_x = step;
-	m_pixel_center_x = m_rstart + (m_nX/2) * step - m_rref;
+	m_pixel_step_x = floatexp(step);
+	m_pixel_center_x = floatexp(m_rstart + (m_nX/2) * step - m_rref);
 	step = (m_istop - m_istart)*(1 / (double)m_nY);
-	m_pixel_step_y = step;
-	m_pixel_center_y = m_istart + (m_nY/2) * step - m_iref;
+	m_pixel_step_y = floatexp(step);
+	m_pixel_center_y = floatexp(m_istart + (m_nY/2) * step - m_iref);
 	m_rApprox.left = 0;
 	m_rApprox.top = 0;
 	m_rApprox.right = m_nX;
@@ -729,11 +682,11 @@ void CFraktalSFT::RenderFractalNANOMB2()
 	}
 	int i;
 	CFixedFloat step = (m_rstop - m_rstart)*(1 / (double)m_nX);
-	m_pixel_step_x = step;
-	m_pixel_center_x = m_rstart + (m_nX/2) * step - m_rref;
+	m_pixel_step_x = floatexp(step);
+	m_pixel_center_x = floatexp(m_rstart + (m_nX/2) * step - m_rref);
 	step = (m_istop - m_istart)*(1 / (double)m_nY);
-	m_pixel_step_y = step;
-	m_pixel_center_y = m_istart + (m_nY/2) * step - m_iref;
+	m_pixel_step_y = floatexp(step);
+	m_pixel_center_y = floatexp(m_istart + (m_nY/2) * step - m_iref);
 	m_rApprox.left = 0;
 	m_rApprox.top = 0;
 	m_rApprox.right = m_nX;

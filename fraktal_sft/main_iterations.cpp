@@ -21,8 +21,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "main_iterations.h"
 #include "fraktal_sft.h"
 #include "resource.h"
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 #include "../common/tooltip.h"
+
+extern "C" int validate_power_for_fractal_type(const int m_nFractalType, const int m_nPower);
+extern "C" void update_power_dropdown_for_fractal_type(HWND hWnd, const int IDC_COMBO3_, const int m_nFractalType, const int m_nPower);
+extern "C" void combo5_addstrings(HWND hWnd, const int IDC_COMBO5_);
 
 static int g_nPrevCalc = -1;
 

@@ -42,7 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <set>
 #include "../common/bitmap.h"
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 #include "colour.h"
 #include "jpeg.h"
 #include "png.h"
@@ -149,6 +149,7 @@ CFraktalSFT::CFraktalSFT()
 	m_bNoGlitchDetection = FALSE;
 	m_nPrevPower = m_nPower = 2;
 	m_nMaxOldGlitches = OLD_GLITCH;
+	update_current_formula();
 
 	int m_nTerms = GetApproxTerms();
 	m_APr = new floatexp[m_nTerms];
@@ -1650,8 +1651,8 @@ std::string CFraktalSFT::GetIm(int nXPos, int nYPos, int width, int height)
 std::string CFraktalSFT::GetZoom()
 {
 	CDecNumber zoomDec = (CDecNumber)4 / ((CDecNumber)m_istop.ToText() - (CDecNumber)m_istart.ToText());
-	floatexp zoomFE; zoomFE = CFixedFloat(zoomDec.m_dec);
-	return zoomFE.toString();
+	floatexp zoomFE(zoomDec.m_dec);
+	return std::string(zoomFE);
 }
 BOOL CFraktalSFT::HighestIteration(int &rx, int &ry)
 {
@@ -3330,7 +3331,16 @@ void CFraktalSFT::update_current_formula(void)
   const struct formula *f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());
   if (f) { current_formula = f; return; }
   name = "formula_" + std::to_string(m_nFractalType);
-  f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());  return;
+  f = (const struct formula *) GetProcAddress(GetModuleHandle(nullptr), name.c_str());
   if (f) { current_formula = f; return; }
   current_formula = &formula_0_2;
+}
+
+void CFraktalSFT::DeleteReferenceOrbit()
+{
+#define D(X) if (X) delete[] X; X = nullptr;
+	D(m_dxr)D(m_dxi)D(m_dz)
+	D(m_ldxr)D(m_ldxi)D(m_ldz)
+	D(m_db_dxr)D(m_db_dxi)D(m_db_z)
+#undef D
 }

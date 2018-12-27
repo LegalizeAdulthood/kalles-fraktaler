@@ -20,9 +20,10 @@
 SYSTEM ?= 64
 include $(SYSTEM).mk
 
-FLAGS := -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -Wno-unused-function -pipe -MMD -g -O3 -ffast-math -I$(WINPREFIX)/include -D_FILE_OFFSET_BITS=64
+FLAGS := -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -Wno-unused-function -pipe -MMD -g -O3 -ffast-math -I$(WINPREFIX)/include -D_FILE_OFFSET_BITS=64 -D_DEFAULT_SOURCE
 # -I$(CLEWPREFIX)/include -Dclew_STATIC -DKF_OPENCL
 COMPILE_FLAGS := -xc++ -std=c++17 $(FLAGS)
+COMPILE_C_FLAGS := -xc -std=c11 $(FLAGS) -fno-var-tracking-assignments
 LINK_FLAGS := -static-libgcc -static-libstdc++ -Wl,--stack,67108864 -Wl,-subsystem,windows -L$(WINPREFIX)/lib -ffast-math
 LIBS := -lgdi32 -lcomdlg32 -lole32 -loleaut32 -lcomctl32 -lwininet -lurlmon -luuid -lmpfr -lgmp -ljpeg -ltiff $(WINPREFIX)/lib/libpng16.a -lz -lgsl -lgslcblas
 
@@ -141,7 +142,7 @@ res.o: fraktal_sft/fraktal_sft.rc
 	$(COMPILE) $(COMPILE_FLAGS) -o $@ -c $<
 
 %.o: %.c
-	$(COMPILE) $(COMPILE_FLAGS) -o $@ -c $<
+	$(COMPILE_C) $(COMPILE_C_FLAGS) -o $@ -c $<
 
 cl/kf_opencl_source.c: cl/kf.cl cl/s2c.sh
 	./cl/s2c.sh kf_opencl_source < cl/kf.cl > cl/kf_opencl_source.c

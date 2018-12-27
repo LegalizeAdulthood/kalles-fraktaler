@@ -23,10 +23,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <boost/multiprecision/mpfr.hpp>
 typedef boost::multiprecision::number<boost::multiprecision::mpfr_float_backend<0>> decNumber;
 
+#include "floatexp.h"
+
 #define LOW_PRECISION 20u
 
 #include <cassert>
 #include <string>
+
 
 class Precision
 {
@@ -72,6 +75,16 @@ public:
   inline CDecNumber(const std::string &a)
   : CDecNumber(a.c_str())
   {
+	};
+  inline CDecNumber(floatexp a)
+  {
+		m_dec.precision(std::max(decNumber::default_precision(), LOW_PRECISION));
+		mpfr_set_fe(m_dec.backend().data(), a, MPFR_RNDN);
+	};
+  inline CDecNumber(long double a)
+  {
+		m_dec.precision(std::max(decNumber::default_precision(), LOW_PRECISION));
+		m_dec = a;
 	};
   inline CDecNumber(double a)
   {

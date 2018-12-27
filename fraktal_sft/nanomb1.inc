@@ -36,7 +36,7 @@ typedef complex<R_hi> C_hi;
 
 R_lo r_lo(const R_hi &x)
 {
-  return mpfr_get_fe(x.backend().data());
+  return mpfr_get_fe(x.backend().data(), MPFR_RNDN);
 }
 
 C_lo c_lo(const C_hi &z)
@@ -445,18 +445,18 @@ void iteratePtDE2(const C_lo &d0, const biPolyClass &fp, const refClass &ref, co
 	{
 	  bGlitch = 1;
 	  antal = p.getIters();
-	  test1 = p.getTest1().todouble();
-	  test2 = p.getTest2().todouble();
-	  de = p.getDE().todouble();
+	  test1 = double(p.getTest1());
+	  test2 = double(p.getTest2());
+	  de = double(p.getDE());
 	  return;
 	}
 	else if(p.haveEscaped())
 	{
 	  bGlitch = 0;
 	  antal = p.getIters();
-	  test1 = p.getTest1().todouble();
-	  test2 = p.getTest2().todouble();
-	  de = p.getDE().todouble();
+	  test1 = double(p.getTest1());
+	  test2 = double(p.getTest2());
+	  de = double(p.getDE());
 	  return;
 	}
 	else

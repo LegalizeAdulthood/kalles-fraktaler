@@ -45,7 +45,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "fraktal_sft.h"
 #include "newton.h"
 #include <malloc.h>
-#include "../formula/formula.h"
+#include "../formula/generated/formula.h"
 #ifdef KF_OPENCL
 #include "../cl/opencl.h"
 #endif

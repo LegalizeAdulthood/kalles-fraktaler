@@ -82,6 +82,23 @@ public:
 		m_f.precision(p);
 		m_f = a;
 	};
+	
+	inline CFixedFloat(long double a)
+	{
+		unsigned p = FixedFloat::default_precision();
+		Precision q(p);
+		m_f.precision(p);
+		m_f = a;
+	};
+
+	inline CFixedFloat(floatexp a)
+	{
+		unsigned p = FixedFloat::default_precision();
+		Precision q(p);
+		m_f.precision(p);
+		mpfr_set_fe(m_f.backend().data(), a, MPFR_RNDN);
+	};
+
 
 	inline ~CFixedFloat()
 	{
@@ -114,6 +131,11 @@ public:
 		f = m_f;
 		return (long double)(FixedFloat(f * pow(FixedFloat(10), nScaling)));
 	};
+
+	inline explicit operator int () const { return mpfr_get_si(m_f.backend().data(), MPFR_RNDN); };
+	inline explicit operator double () const { return mpfr_get_d(m_f.backend().data(), MPFR_RNDN); };
+	inline explicit operator long double () const { return mpfr_get_ld(m_f.backend().data(), MPFR_RNDN); };
+	inline explicit operator floatexp () const { return mpfr_get_fe(m_f.backend().data(), MPFR_RNDN); };
 
 	inline CFixedFloat Add(const CFixedFloat &A) const
 	{

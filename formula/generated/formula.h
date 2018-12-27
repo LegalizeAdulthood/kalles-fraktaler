@@ -25,55 +25,38 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef KF_FORMULA_H
 #define KF_FORMULA_H 1
 
-#include <cassert>
-#include <cmath>
+#include <assert.h>
+#include <math.h>
+#include <stdint.h>
 
 #include <mpfr.h>
 
-#include "../../fraktal_sft/floatexp.h"
-
-using std::abs;
-using std::floor;
-using std::sqrt;
-using std::exp;
-using std::log;
-using std::sin;
-using std::cos;
-using std::tan;
-using std::sinh;
-using std::cosh;
-using std::tanh;
-using std::asin;
-using std::acos;
-using std::atan;
-using std::asinh;
-using std::acosh;
-using std::atanh;
+#include "../cfloatexp.h"
 
 typedef int f_plainf(int,float,float*,float,float,float,float,float*,volatile int*);
 typedef int f_plain(int,double,double*,double,double,double,double,double*,volatile int*);
 typedef int f_plainl(int,long double,long double*,long double,long double,long double,long double,long double*,volatile int*);
-typedef int f_plainfe(int,floatexp,floatexp*,floatexp,floatexp,floatexp,floatexp,floatexp*,volatile int*);
+typedef int f_plainfe(int,cfloatexp,cfloatexp*,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp*,volatile int*);
 
 typedef int f_referencef(int,int,float*,float*,float*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,float,float,float,float,float,float,float,int,int*,float*,float*);
 typedef int f_reference(int,int,double*,double*,double*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,double,double,double,double,double,double,double,int,int*,double*,double*);
 typedef int f_referencel(int,int,long double*,long double*,long double*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,long double,long double,long double,long double,long double,long double,long double,int,int*,long double*,long double*);
-typedef int f_referencefe(int,int,floatexp*,floatexp*,floatexp*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,floatexp,floatexp,floatexp,floatexp,floatexp,floatexp,floatexp,int,int*,floatexp*,floatexp*);
+typedef int f_referencefe(int,int,cfloatexp*,cfloatexp*,cfloatexp*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp,int,int*,cfloatexp*,cfloatexp*);
 
 typedef int f_referenceDf(int,int,float*,float*,float*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,float,float,float,float,float,float,float,int,int*,float*,float*,float*,float*);
 typedef int f_referenceD(int,int,double*,double*,double*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,double,double,double,double,double,double,double,int,int*,double*,double*,double*,double*);
 typedef int f_referenceDl(int,int,long double*,long double*,long double*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,long double,long double,long double,long double,long double,long double,long double,int,int*,long double*,long double*,long double*,long double*);
-typedef int f_referenceDfe(int,int,floatexp*,floatexp*,floatexp*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,floatexp,floatexp,floatexp,floatexp,floatexp,floatexp,floatexp,int,int*,floatexp*,floatexp*,floatexp*,floatexp*);
+typedef int f_referenceDfe(int,int,cfloatexp*,cfloatexp*,cfloatexp*,volatile int*,int*,int*,int*,mpfr_t,mpfr_t,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp,int,int*,cfloatexp*,cfloatexp*,cfloatexp*,cfloatexp*);
 
 typedef int f_perturbationf(int,int,float*,float*,float*,int*,float*,float*,int*,float,int,int,float,float,float,float,float*,float*,float,float);
 typedef int f_perturbation(int,int,double*,double*,double*,int*,double*,double*,int*,double,int,int,double,double,double,double,double*,double*,double,double);
 typedef int f_perturbationl(int,int,long double*,long double*,long double*,int*,long double*,long double*,int*,long double,int,int,long double,long double,long double,long double,long double*,long double*,long double,long double);
-typedef int f_perturbationfe(int,int,floatexp*,floatexp*,floatexp*,int*,floatexp*,floatexp*,int*,floatexp,int,int,floatexp,floatexp,floatexp,floatexp,floatexp*,floatexp*,floatexp,floatexp);
+typedef int f_perturbationfe(int,int,cfloatexp*,cfloatexp*,cfloatexp*,int*,cfloatexp*,cfloatexp*,int*,cfloatexp,int,int,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp*,cfloatexp*,cfloatexp,cfloatexp);
 
 typedef int f_perturbationDf(int,int,float*,float*,float*,int*,float*,float*,int*,float,int,int,float,float,float,float,float*,float*,float,float,float*,float*);
 typedef int f_perturbationD(int,int,double*,double*,double*,int*,double*,double*,int*,double,int,int,double,double,double,double,double*,double*,double,double,double*,double*);
 typedef int f_perturbationDl(int,int,long double*,long double*,long double*,int*,long double*,long double*,int*,long double,int,int,long double,long double,long double,long double,long double*,long double*,long double,long double,long double*,long double*);
-typedef int f_perturbationDfe(int,int,floatexp*,floatexp*,floatexp*,int*,floatexp*,floatexp*,int*,floatexp,int,int,floatexp,floatexp,floatexp,floatexp,floatexp*,floatexp*,floatexp,floatexp,floatexp*,floatexp*);
+typedef int f_perturbationDfe(int,int,cfloatexp*,cfloatexp*,cfloatexp*,int*,cfloatexp*,cfloatexp*,int*,cfloatexp,int,int,cfloatexp,cfloatexp,cfloatexp,cfloatexp,cfloatexp*,cfloatexp*,cfloatexp,cfloatexp,cfloatexp*,cfloatexp*);
 
 typedef int f_period_tri(int,double,double,double,mpfr_t,mpfr_t,mpfr_t,volatile int*);
 typedef int f_period_jsk(int,double,double,double,mpfr_t,mpfr_t,mpfr_t,double*,volatile int*);
@@ -113,9 +96,9 @@ static f_domain_size domain_size;
 //static const char source[];
 #endif
 
-#define MAGIC ((int)(0xC01dCaf3))
-#define SIZE ((int)(sizeof(struct formula)))
-#define VERSION 7
+#define FORMULA_MAGIC ((int)(0xC01dCaf3))
+#define FORMULA_SIZE ((int)(sizeof(struct formula)))
+#define FORMULA_VERSION 7
 
 struct formula
 {
@@ -142,13 +125,13 @@ struct formula
 };
 
 #define FORMULA(name,source,degree) \
-extern "C" { __declspec(dllexport) struct formula et = \
-{ MAGIC, SIZE, VERSION \
+__declspec(dllexport) struct formula et = \
+{ FORMULA_MAGIC, FORMULA_SIZE, FORMULA_VERSION \
 , &reference, &referencel, &referencefe \
 , &referenceD, &referenceDl, &referenceDfe \
 , &perturbation, &perturbationl, &perturbationfe \
 , &perturbationD, &perturbationDl, &perturbationDfe \
 , &period_tri, &period_jsk, &newton, &size, &skew \
-}; }
+};
 
 #endif

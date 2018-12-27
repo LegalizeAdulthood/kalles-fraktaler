@@ -61,8 +61,8 @@ void CFraktalSFT::MandelCalc()
 			double dbD0i = D0i.todouble(m_nScalingOffset);
 			double Dr = TDnr.todouble(m_nScalingOffset);
 			double Di = TDni.todouble(m_nScalingOffset);
-			long double ldcr = TDDnr.toLongDouble();
-			long double ldci = TDDni.toLongDouble();
+			long double ldcr = (long double)(TDDnr);
+			long double ldci = (long double)(TDDni);
 			if (m_nPower == 2){
 				if (GetDerivatives())
 				{
@@ -185,12 +185,12 @@ void CFraktalSFT::MandelCalc()
 		else
 		{
 
-			double dbD0r = D0r.todouble();
-			double dbD0i = D0i.todouble();
-			double Dr = TDnr.todouble();
-			double Di = TDni.todouble();
-			dr = TDDnr.todouble();
-			di = TDDni.todouble();
+			double dbD0r = double(D0r);
+			double dbD0i = double(D0i);
+			double Dr = double(TDnr);
+			double Di = double(TDni);
+			dr = double(TDDnr);
+			di = double(TDDni);
 
 			if (m_nFractalType == 0 && m_nPower > 10)
 			{
@@ -275,10 +275,10 @@ void CFraktalSFT::MandelCalc()
 			else // FIXME matrix derivatives
 			{
 
-				double daa = daa0.todouble();
-				double dab = dab0.todouble();
-				double dba = dba0.todouble();
-				double dbb = dbb0.todouble();
+				double daa = double(daa0);
+				double dab = double(dab0);
+				double dba = double(dba0);
+				double dbb = double(dbb0);
 				bool ok;
 				if (GetDerivatives())
 				{

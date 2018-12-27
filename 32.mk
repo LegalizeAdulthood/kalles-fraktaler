@@ -1,6 +1,7 @@
 WINPREFIX ?= $(HOME)/win32
 # CLEWPREFIX ?= ../clew
 COMPILE ?= i686-w64-mingw32-g++
+COMPILE_C ?= i686-w64-mingw32-gcc
 LINK ?= i686-w64-mingw32-g++
 WINDRES ?= i686-w64-mingw32-windres
 AR ?= i686-w64-mingw32-ar

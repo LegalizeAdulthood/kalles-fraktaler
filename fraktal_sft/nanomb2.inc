@@ -40,7 +40,7 @@ typedef complex<R_hi> C_hi;
 // Conversion routines
 inline R_lo r_lo(const R_hi &z)
 {
-  return mpfr_get_fe(z.backend().data());
+  return mpfr_get_fe(z.backend().data(), MPFR_RNDN);
 }
 
 inline C_lo c_lo(const C_hi &z)
@@ -334,7 +334,7 @@ public:
 			}
 			r = abs(tab[0][1])/abs(den);
 		}
-std::cerr << "period " << m_period << " radius " << r.toString() << std::endl;
+std::cerr << "period " << m_period << " radius " << std::string(r) << std::endl;
 		return r;
 #endif
 	}
@@ -528,9 +528,9 @@ static void iteratePtDE1( C_lo d0, const std::vector<biPolyClass> &SSAs, const r
 	if(p.haveEscaped())
 	{
 	  antal = p.getIters();
-	  test1 = p.getTest1().todouble();
-	  test2 = p.getTest1().todouble();
-    de = p.getDE().todouble();
+	  test1 = double(p.getTest1());
+	  test2 = double(p.getTest1());
+    de = double(p.getDE());
     return;
 	}
 	else

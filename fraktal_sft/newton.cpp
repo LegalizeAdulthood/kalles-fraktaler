@@ -141,7 +141,7 @@ static DWORD WINAPI ThBallPeriod(BallPeriod *b)
       }
       Ei = rdz * rdz + (2 * rz + r * (2 * rdz + r * Ei)) * Ei;
       dz = 2 * z * dz + complex<floatexp>(1.0, 0.0);
-      z = complex<floatexp>(mpfr_get_fe(b->c->zr), mpfr_get_fe(b->c->zi));
+      z = complex<floatexp>(mpfr_get_fe(b->c->zr, MPFR_RNDN), mpfr_get_fe(b->c->zi, MPFR_RNDN));
       rdz = abs(dz);
       rz = abs(z);
       rr = r * (rdz + r * Ei);
@@ -222,7 +222,7 @@ static int ball_period_do(const complex<flyttyp> &center, flyttyp radius, int ma
   mpfr_init2(c.zi2, bits);
   mpfr_init2(c.zri, bits);
   mpfr_init2(c.t, bits);
-  c.zradius = mpfr_get_fe(radius.m_dec.backend().data());
+  c.zradius = mpfr_get_fe(radius.m_dec.backend().data(), MPFR_RNDN);
   for (int t = 0; t < 2; ++t)
   {
     ball[t].threadid = t;
@@ -631,7 +631,7 @@ static int m_d_nucleus(complex<flyttyp> *c_out, const complex<flyttyp> &c_guess,
 
 static inline complex<floatexp> fec(const complex<flyttyp> &z)
 {
-  return complex<floatexp>(mpfr_get_fe(z.m_r.m_dec.backend().data()), mpfr_get_fe(z.m_i.m_dec.backend().data()));
+  return complex<floatexp>(mpfr_get_fe(z.m_r.m_dec.backend().data(), MPFR_RNDN), mpfr_get_fe(z.m_i.m_dec.backend().data(), MPFR_RNDN));
 }
 
 static complex<floatexp> m_d_size(const complex<flyttyp> &nucleus, int period,HWND hWnd)
@@ -796,7 +796,7 @@ static int WINAPI ThNewton(HWND hWnd)
 			{
 			  complex<floatexp> size = m_d_size(c,g_period,hWnd);
 			  floatexp msizefe = floatexp(.25)/sqrt(cabs2(size));
-			  mpfr_set_fe(msize.m_dec.backend().data(), msizefe);
+			  mpfr_set_fe(msize.m_dec.backend().data(), msizefe, MPFR_RNDN);
 			}
 			else
 			{

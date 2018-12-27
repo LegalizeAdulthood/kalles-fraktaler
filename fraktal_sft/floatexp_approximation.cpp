@@ -174,25 +174,25 @@ void CFraktalSFT::CalculateApproximation(int nType)
 		if (m_nFractalType == 0 && isC)
 		{
 			if (m_nPower == 2){
-				m_APr[0] = (xr*APr[0] - xi*APi[0]).mul2() + _1;
-				m_APi[0] = (xi*APr[0] + xr*APi[0]).mul2();
+				m_APr[0] = mul2(xr*APr[0] - xi*APi[0]) + _1;
+				m_APi[0] = mul2(xi*APr[0] + xr*APi[0]);
 				for (int k = 1; k<m_nTerms; k++){
-					m_APr[k] = (xr*APr[k] - xi*APi[k]).mul2();
-					m_APi[k] = (xi*APr[k] + xr*APi[k]).mul2();
+					m_APr[k] = mul2(xr*APr[k] - xi*APi[k]);
+					m_APi[k] = mul2(xi*APr[k] + xr*APi[k]);
 					int n = k / 2;
 					int q = n;
 					int f = 0;
 					int r = k - 1;
 					while (q){
-						m_APr[k] += (APr[f] * APr[r] - APi[f] * APi[r]).mul2();
-						m_APi[k] += (APi[f] * APr[r] + APr[f] * APi[r]).mul2();
+						m_APr[k] += mul2(APr[f] * APr[r] - APi[f] * APi[r]);
+						m_APi[k] += mul2(APi[f] * APr[r] + APr[f] * APi[r]);
 						q--;
 						f++;
 						r--;
 					}
 					if (k % 2){
 						m_APr[k] += APr[n] * APr[n] - APi[n] * APi[n];
-						m_APi[k] += (APr[n] * APi[n]).mul2();
+						m_APi[k] += mul2(APr[n] * APi[n]);
 					}
 				}
 			}
@@ -249,7 +249,7 @@ void CFraktalSFT::CalculateApproximation(int nType)
 				}
 			}
 			if (i == 0 && j == 0 && (q == Q1 || q == Q2)) total += 2 * xr * xi;
-			total = total.mul2();
+			total = mul2(total);
 			if (q == Q1 || q == Q3) total = -total;
 			if (i == 0 && j == 1) total += 1;
 			m_APs->t[i][j] = total;
@@ -306,8 +306,8 @@ void CFraktalSFT::CalculateApproximation(int nType)
 						m_nMaxApproximation = iteration;
 						break;
 					}
-					double yr = (dxr + Dnr).todouble();
-					double yi = (dxi + Dni).todouble();
+					double yr = double(dxr + Dnr);
+					double yi = double(dxi + Dni);
 					if (g_real*yr*yr + g_imag*yi*yi>m_nBailout2){
 						m_nMaxApproximation = iteration;
 						break;
@@ -318,12 +318,12 @@ void CFraktalSFT::CalculateApproximation(int nType)
 					{
 
 						if (m_nPower == 2){
-							Dnr = (dxr*dbTr[j] - dxi*dbTi[j]).mul2() + dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j] + dbTr0[j];
-							Dni = (dxr*dbTi[j] + dxi*dbTr[j] + dbTr[j] * dbTi[j]).mul2() + dbTi0[j];
+							Dnr = mul2(dxr*dbTr[j] - dxi*dbTi[j]) + dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j] + dbTr0[j];
+							Dni = mul2(dxr*dbTi[j] + dxi*dbTr[j] + dbTr[j] * dbTi[j]) + dbTi0[j];
 						}
 						else if (m_nPower == 3){
-							Dnr = _3*((dxr*dxr - dxi*dxi)*dbTr[j] + dxr*(dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j]) - dbTi[j] * (dxi*(dxr + dbTr[j]).mul2() + dbTr[j] * dbTi[j])) + dbTr[j] * dbTr[j] * dbTr[j] + dbTr0[j];
-							Dni = _3*((dxr*dxr - dxi*dxi)*dbTi[j] + dxi*(dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j]) + dbTr[j] * (dxr*(dxi + dbTi[j]).mul2() + dbTr[j] * dbTi[j])) - dbTi[j] * dbTi[j] * dbTi[j] + dbTi0[j];
+							Dnr = _3*((dxr*dxr - dxi*dxi)*dbTr[j] + dxr*(dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j]) - dbTi[j] * (dxi*mul2(dxr + dbTr[j]) + dbTr[j] * dbTi[j])) + dbTr[j] * dbTr[j] * dbTr[j] + dbTr0[j];
+							Dni = _3*((dxr*dxr - dxi*dxi)*dbTi[j] + dxi*(dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j]) + dbTr[j] * (dxr*mul2(dxi + dbTi[j]) + dbTr[j] * dbTi[j])) - dbTi[j] * dbTi[j] * dbTi[j] + dbTi0[j];
 						}
 						else if (m_nPower == 4){
 							complex<floatexp> X(dxr, dxi);
@@ -412,8 +412,8 @@ void CFraktalSFT::CalculateApproximation(int nType)
 
 						if (m_nPower == 2)
 						{
-							Dnr = (dxr*dbTr[j] - dxi*dbTi[j]).mul2() + dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j] + dbTr0[j];
-							Dni = diffabs(dxr * dxi, dxr*dbTi[j] + dxi*dbTr[j] + dbTr[j] * dbTi[j]).mul2() + dbTi0[j];
+							Dnr = mul2(dxr*dbTr[j] - dxi*dbTi[j]) + dbTr[j] * dbTr[j] - dbTi[j] * dbTi[j] + dbTr0[j];
+							Dni = mul2(diffabs(dxr * dxi, dxr*dbTi[j] + dxi*dbTr[j] + dbTr[j] * dbTi[j])) + dbTi0[j];
 						}
 
 					}

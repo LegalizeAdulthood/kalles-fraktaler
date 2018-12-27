@@ -259,17 +259,17 @@ void CFraktalSFT::MandelCalcLDBL()
 				}
 			}
 			}
-			dr = (ldcr * m_fPixelSpacing).toLongDouble();
-			di = (ldci * m_fPixelSpacing).toLongDouble();
+			dr = (long double)(ldcr * m_fPixelSpacing);
+			di = (long double)(ldci * m_fPixelSpacing);
 		}
 		else if (m_nFractalType == 0 && m_nPower > 10) // FIXME matrix derivatives
 		{
-			dr = TDDnr.toLongDouble();
-			di = TDDni.toLongDouble();
-			long double lD0r = D0r.toLongDouble();
-			long double lD0i = D0i.toLongDouble();
-			long double Dr = TDnr.toLongDouble();
-			long double Di = TDni.toLongDouble();
+			dr = (long double)TDDnr;
+			di = (long double)TDDni;
+			long double lD0r = (long double)D0r;
+			long double lD0i = (long double)D0i;
+			long double Dr = (long double)TDnr;
+			long double Di = (long double)TDni;
 			// FIXME check this is still ok around long double vs scaled double zoom threshold e600
 			antal = GetDerivatives()
 			  ? Perturbation_Var(antal, m_ldxr, m_ldxi, Dr, Di, lD0r, lD0i, test1, test2, m_nBailout2, nMaxIter, m_ldz, bGlitch, m_nPower, m_pnExpConsts, dr, di, m_bNoGlitchDetection)
@@ -282,16 +282,16 @@ void CFraktalSFT::MandelCalcLDBL()
 		else
 		{
 
-			dr = TDDnr.toLongDouble();
-			di = TDDni.toLongDouble();
-			long double lD0r = D0r.toLongDouble();
-			long double lD0i = D0i.toLongDouble();
-			long double Dr = TDnr.toLongDouble();
-			long double Di = TDni.toLongDouble();
-			long double ldaa = daa.toLongDouble();
-			long double ldab = dab.toLongDouble();
-			long double ldba = dba.toLongDouble();
-			long double ldbb = dbb.toLongDouble();
+			dr = (long double)TDDnr;
+			di = (long double)TDDni;
+			long double lD0r = (long double)D0r;
+			long double lD0i = (long double)D0i;
+			long double Dr = (long double)TDnr;
+			long double Di = (long double)TDni;
+			long double ldaa = (long double)daa;
+			long double ldab = (long double)dab;
+			long double ldba = (long double)dba;
+			long double ldbb = (long double)dbb;
 			long double test1f, test2f;
 			bool ok;
 			if (GetDerivatives())

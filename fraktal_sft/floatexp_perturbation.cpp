@@ -102,7 +102,7 @@ void CFraktalSFT::MandelCalcEXP()
 					yr = m_dxr[antal] + Dr;
 					yi = m_dxi[antal] + Di;
 					test2 = test1;
-					test1 = (real*yr*yr + imag*yi*yi).todouble();
+					test1 = double(real*yr*yr + imag*yi*yi);
 					if (test1<m_dz[antal]){
 						bGlitch = TRUE;
 						if (! m_bNoGlitchDetection)
@@ -137,7 +137,7 @@ void CFraktalSFT::MandelCalcEXP()
 					yr = m_dxr[antal] + Dr;
 					yi = m_dxi[antal] + Di;
 					test2 = test1;
-					test1 = (real*yr*yr + imag*yi*yi).todouble();
+					test1 = double(real*yr*yr + imag*yi*yi);
 					if (test1<m_dz[antal]){
 						bGlitch = TRUE;
 						if (! m_bNoGlitchDetection)
@@ -176,22 +176,22 @@ void CFraktalSFT::MandelCalcEXP()
 				{
 					floatexp dzc[2] = { dr, di };
 					floatexp dci[4] = { daa, dab, dba, dbb };
-					ok = current_formula->perturbationDfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &antal, &test1f, &test2f, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, D0r, D0i, &dzc[0], &dci[0]);
+					ok = current_formula->perturbationDfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &antal, &test1f, &test2f, &bGlitch, floatexp(m_nBailout2), nMaxIter, m_bNoGlitchDetection, floatexp(g_real), floatexp(g_imag), floatexp(g_FactorAR), floatexp(g_FactorAI), &Dr, &Di, D0r, D0i, &dzc[0], &dci[0]);
 					dr = dzc[0] * m_fPixelSpacing;
 					di = dzc[1] * m_fPixelSpacing;
 				}
 				else
 				{
-					ok = current_formula->perturbationfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &antal, &test1f, &test2f, &bGlitch, m_nBailout2, nMaxIter, m_bNoGlitchDetection, g_real, g_imag, g_FactorAR, g_FactorAI, &Dr, &Di, D0r, D0i);
+					ok = current_formula->perturbationfe(m_nFractalType, m_nPower, m_dxr, m_dxi, m_dz, &antal, &test1f, &test2f, &bGlitch, floatexp(m_nBailout2), nMaxIter, m_bNoGlitchDetection, floatexp(g_real), floatexp(g_imag), floatexp(g_FactorAR), floatexp(g_FactorAI), &Dr, &Di, D0r, D0i);
 				}
 				assert(ok && "perturbation_floatexp");
-				test1 = test1f.todouble();
-				test2 = test2f.todouble();
+				test1 = double(test1f);
+				test2 = double(test2f);
 
 		}
 
 		double de = GetDerivatives()
-		  ? double(sqrt(test1) * log(test1) / sqrt(dr * dr + di * di).todouble())
+		  ? sqrt(test1) * log(test1) / double(sqrt(dr * dr + di * di))
 		  : 0
 		  ;
 

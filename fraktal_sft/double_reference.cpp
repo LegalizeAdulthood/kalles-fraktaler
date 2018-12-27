@@ -371,10 +371,10 @@ void CFraktalSFT::CalculateReference()
 
 		floatexp _x, _y, daa, dab, dba, dbb;
 		GetPixelCoordinates(g_nAddRefX, g_nAddRefY, _x, _y, daa, dab, dba, dbb);
-		double ddaa = daa.todouble();
-		double ddab = dab.todouble();
-		double ddba = dba.todouble();
-		double ddbb = dbb.todouble();
+		double ddaa = double(daa);
+		double ddab = double(dab);
+		double ddba = double(dba);
+		double ddbb = double(dbb);
 		bool ok;
 		if (GetDerivatives())
 		{

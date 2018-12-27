@@ -43,8 +43,8 @@ struct mcthread_common
 	long double *m_ldz, *terminate, *glitch_threshold;
 	int *m_nMaxIter, *m_nGlitchIter, *nMaxIter, *m_nRDone;
 	int *antal;
-	double *test1;
-	double *test2;
+	long double *test1;
+	long double *test2;
 	volatile BOOL *stop;
 	long double dr, di;
 };
@@ -59,16 +59,16 @@ struct mcthread
 static DWORD WINAPI mcthreadfunc(mcthread *p0)
 {
 	int antal = 0;
-	double test1 = 0;
-	double test2 = 0;
+	long double test1 = 0;
+	long double test2 = 0;
 	bool stored = false;
-	double old_absval = 0;
-	double abs_val = 0;
+	long double old_absval = 0;
+	long double abs_val = 0;
 
 	mcthread_common *p = p0->common;
 	long double dr = p->dr;
 	long double di = p->di;
-	const double glitch_threshold = *p->glitch_threshold;
+	const long double glitch_threshold = *p->glitch_threshold;
 	int i = 0;
 	switch (p0->nType)
 	{
@@ -228,17 +228,17 @@ void CFraktalSFT::CalculateReferenceLDBL()
 	m_ldz  = new long double [m_nMaxIter];
 
 	int antal = 0;
-	double test1 = 0;
-	double test2 = 0;
+	long double test1 = 0;
+	long double test2 = 0;
 
 	long double dr = 1, di = 0;
 
-	double terminate = SMOOTH_BAILOUT*SMOOTH_BAILOUT;
+	long double terminate = SMOOTH_BAILOUT*SMOOTH_BAILOUT;
 	m_nGlitchIter = m_nMaxIter + 1;
 	int nMaxIter = m_nMaxIter;
 
 	if (m_nFractalType == 0 && m_nPower == 2){ // FIXME matrix derivatives, option to disable derivatives
-		double glitch_threshold = 0.0000001;
+		long double glitch_threshold = 0.0000001;
 		if (GetGlitchLowTolerance()) {
 			glitch_threshold = sqrt(glitch_threshold);
 		}
@@ -321,10 +321,10 @@ void CFraktalSFT::CalculateReferenceLDBL()
 	else if (m_nFractalType == 0 && m_nPower > 10) // FIXME matrix derivatives, option to disable derivatives
 	{
 		bool stored = false;
-		double old_absval = 0;
-		double abs_val = 0;
+		long double old_absval = 0;
+		long double abs_val = 0;
 		CFixedFloat xr = g_SeedR, xi = g_SeedI;
-		double threashold = 0.0001;
+		long double threashold = 0.0001;
 		for (i = 7; i <= m_nPower; i += 2)
 			threashold *= 10;
     if (GetGlitchLowTolerance()) {
@@ -336,9 +336,9 @@ void CFraktalSFT::CalculateReferenceLDBL()
 		for (i = 0; i<nMaxIter && !m_bStop; i++){
 			complex<CFixedFloat> X(xr, xi), r(m_rref, m_iref);
 			complex<CFixedFloat> Xn = (X^m_nPower) + r;
-			floatexp xrf; xrf = xr;
-			floatexp xif; xif = xi;
-			complex<long double> x(xrf.toLongDouble(), xif.toLongDouble());
+			floatexp xrf(xr);
+			floatexp xif(xi);
+			complex<long double> x((long double)xrf, (long double)xif);
 			d = m_nPower * d * (x ^ (m_nPower - 1)) + 1;
 			xr = Xn.m_r;
 			xi = Xn.m_i;
@@ -385,10 +385,10 @@ void CFraktalSFT::CalculateReferenceLDBL()
 
 		floatexp _x, _y, daa, dab, dba, dbb;
 		GetPixelCoordinates(g_nAddRefX, g_nAddRefY, _x, _y, daa, dab, dba, dbb);
-		long double ldaa = daa.toLongDouble();
-		long double ldab = dab.toLongDouble();
-		long double ldba = dba.toLongDouble();
-		long double ldbb = dbb.toLongDouble();
+		long double ldaa = (long double) daa;
+		long double ldab = (long double) dab;
+		long double ldba = (long double) dba;
+		long double ldbb = (long double) dbb;
 		long double test1f, test2f;
 		bool ok;
 		if (GetDerivatives())

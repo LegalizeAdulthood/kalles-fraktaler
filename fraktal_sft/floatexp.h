@@ -26,418 +26,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <cmath>
 #include <limits>
-#include "CFixedFloat.h"
 
 #define MAX_PREC 1020
 // this has two fewer 0 than you might expect, this is to give headroom for
 // avoiding overflow in + and other functions. it is the exponent for 0.0
 #define EXP_MIN (-0x80000000000000LL)
 
-class floatexp
+#define isnanl isnan
+#define isinfl isinf
+
+#include "../formula/cfloatexp.h"
+
+struct floatexp;
+floatexp operator+(const floatexp &a, const floatexp &b); 
+floatexp operator-(const floatexp &a, const floatexp &b); 
+floatexp operator*(const floatexp &a, const floatexp &b);
+floatexp operator/(const floatexp &a, const floatexp &b);
+
+
+struct floatexp : public cfloatexp
 {
-public:
-	double val;
-	int64_t exp;
-	inline void align()
-	{
-		if (val != 0)
-		{
-			union { double d; int64_t i; } u;
-			u.d = val;
-			exp += ((u.i & 0x7FF0000000000000LL) >> 52) - 1023;
-			u.i = (u.i & 0x800FFFFFFFFFFFFFLL) | 0x3FF0000000000000LL;
-			val = u.d;
-		}
-		else
-		{
-			val = 0;
-			exp = EXP_MIN;
-		}
-	}
-	inline floatexp &abs()
-	{
-		if(val<0)
-			val=-val;
-		return *this;
-	}
-	inline void initFromDouble(double a)
-	{
-		val=a;
-		exp=0;
-		align();
-	}
-	inline void initFromLongDouble(long double a)
-	{
-		using std::frexp;
-		int e = 0;
-		a = frexp(a, &e);
-		val=a;
-		exp=e;
-		align();
-	}
-	inline double setExp(double newval,int64_t newexp) const
-	{
-//		int64_t tmpval = (*((int64_t*)&newval) & 0x800FFFFFFFFFFFFF) | ((newexp+1023)<<52);
-//		memcpy(&newval,&tmpval,sizeof(double));
-//		return newval;
-		union { double d; int64_t i; } u;
-		u.d = newval;
-		u.i = (u.i & 0x800FFFFFFFFFFFFFLL) | ((newexp + 1023) << 52);
-		newval = u.d;
-		return newval;
-	}
-	inline floatexp()
-	{
-		val = 0;
-		exp = EXP_MIN;
-	}
-	inline floatexp(int a)
-	{
-		initFromDouble(a);
-	}
-	inline floatexp(double a)
-	{
-		initFromDouble(a);
-	}
-	inline floatexp(double a, int64_t e)
-	{
-		val = a;
-		exp = e;
-		align();
-	}
-	inline floatexp(double a, int64_t e, int dummy)
-	{
-		(void) dummy;
-		val = a;
-		exp = e;
-	}
-	inline floatexp(long double a)
-	{
-		initFromLongDouble(a);
-	}
-	inline floatexp &operator =(const floatexp &a)
-	{
-		val=a.val;
-		exp=a.exp;
-		return *this;
-	}
-	inline floatexp &operator =(int a)
-	{	
-		initFromDouble((double)a);
-		return *this;
-	}
-	inline floatexp &operator =(double a)
-	{
-		initFromDouble(a);
-		return *this;
-	}
-	inline floatexp &operator =(long double a)
-	{
-		initFromLongDouble(a);
-		return *this;
-	}
-	inline floatexp operator *(const floatexp &a) const
-	{
-		floatexp r;
-		r.val = a.val*val;
-		r.exp = a.exp+exp;
-		r.align();
-		return r;
-	}
-	inline floatexp operator /(const floatexp &a) const
-	{
-		floatexp r;
-		r.val = val/a.val;
-		r.exp = exp - a.exp;
-		r.align();
-		return r;
-	}
-	__attribute__ ((warn_unused_result))
-	inline floatexp mul2() const
-	{
-		floatexp r;
-		r.val = val;
-		r.exp = exp + 1;
-		return r;
-	}
-	__attribute__ ((warn_unused_result))
-	inline floatexp mul4() const
-	{
-		floatexp r;
-		r.val = val;
-		r.exp = exp + 2;
-		return r;
-	}
-	inline floatexp operator +(const floatexp &a) const
-	{
-		floatexp r;
-		int64_t diff;
-		if(exp>a.exp){
-			diff = exp-a.exp;
-			r.exp = exp;
-			if(diff>MAX_PREC)
-				r.val=val;
-			else{
-				double aval = setExp(a.val,-diff);
-				r.val = val+aval;
-			}
-		}
-		else{
-			diff = a.exp-exp;
-			r.exp = a.exp;
-			if(diff>MAX_PREC)
-				r.val=a.val;
-			else{
-				double aval = setExp(val,-diff);
-				r.val = a.val+aval;
-			}
-		}
-		r.align();
-		return r;
-	}
-	inline floatexp operator -() const
-	{
-		floatexp r=*this;
-		r.val=-r.val;
-		return r;
-	}
-	inline floatexp &operator +=(const floatexp &a)
-	{
-		*this = *this+a;
-		return *this;
-	}
-	inline floatexp operator -(const floatexp &a) const
-	{
-		floatexp r;
-		int64_t diff;
-		if(exp>a.exp){
-			diff = exp-a.exp;
-			r.exp = exp;
-			if(diff>MAX_PREC)
-				r.val = val;
-			else{
-				double aval = setExp(a.val,-diff);
-				r.val = val-aval;
-			}
-		}
-		else{
-			diff = a.exp-exp;
-			r.exp = a.exp;
-			if(diff>MAX_PREC)
-				r.val=-a.val;
-			else{
-				double aval = setExp(val,-diff);
-				r.val = aval-a.val;
-			}
-		}
-		r.align();
-		return r;
-	}
-	inline floatexp &operator -=(const floatexp &a)
-	{
-		*this = *this-a;
-		return *this;
-	}
-	inline bool operator >(const floatexp &a) const
-	{
-		if(val>0){
-			if(a.val<0)
-				return true;
-			if(exp>a.exp)
-				return true;
-			else if(exp<a.exp)
-				return false;
-			return val>a.val;
-		}
-		else{
-			if(a.val>0)
-				return false;
-			if(exp>a.exp)
-				return false;
-			else if(exp<a.exp)
-				return true;
-			return val>a.val;
-		}
-	}
-	inline bool operator <(const floatexp &a) const
-	{
-		if(val>0){
-			if(a.val<0)
-				return false;
-			if(exp>a.exp)
-				return false;
-			else if(exp<a.exp)
-				return true;
-			return val<a.val;
-		}
-		else{
-			if(a.val>0)
-				return true;
-			if(exp>a.exp)
-				return true;
-			else if(exp<a.exp)
-				return false;
-			return val<a.val;
-		}
-	}
-	inline bool operator <=(const floatexp &a) const
-	{
-		return (*this<a || *this==a);
-	}
-	inline bool operator <=(const int a) const
-	{
-		return (*this<a || *this==a);
-	}
-	inline bool operator ==(const floatexp &a) const
-	{
-		if(exp!=a.exp)
-			return false;
-		return val==a.val;
-	}
-	inline bool iszero() const
-	{
-		return (val==0 && exp==0);
-	}
-	inline double todouble() const
-	{
-		if(exp<-MAX_PREC || exp>MAX_PREC)
-			return 0;
-		return setExp(val,exp);
-	}
-	inline explicit operator double () const
-	{
-		return todouble();
-	}
-	inline double todouble(int nScaling) const
-	{
-		if(!nScaling)
-			return todouble();
-		floatexp ret = *this;
-		while(nScaling>9){
-			ret.val*=1e10;
-			ret.align();
-			nScaling-=10;
-		}
-		while(nScaling>2){
-			ret.val*=1e3;
-			ret.align();
-			nScaling-=3;
-		}
-		while(nScaling>0){
-			ret.val*=1e1;
-			ret.align();
-			nScaling--;
-		}
-		while(nScaling<-9){
-			ret.val/=1e10;
-			ret.align();
-			nScaling+=10;
-		}
-		while(nScaling<-2){
-			ret.val/=1e3;
-			ret.align();
-			nScaling+=3;
-		}
-		while(nScaling<0){
-			ret.val/=1e1;
-			ret.align();
-			nScaling++;
-		}
-		if(ret.exp<-MAX_PREC || ret.exp>MAX_PREC)
-			return 0;
-		return setExp(ret.val,ret.exp);
-	}
-	inline floatexp &operator /=(double a)
-	{
-		val/=a;
-		align();
-		return *this;
-	}
-	inline floatexp &operator *=(double a)
-	{
-		val*=a;
-		align();
-		return *this;
-	}
-	inline floatexp &operator *=(floatexp a)
-	{
-		return *this = *this * a;
-	}
-	inline floatexp &operator *=(long double a)
-	{
-		return *this *= floatexp(a);
-	}
-
-	inline floatexp &operator =(const CFixedFloat &a)
-	{
-		signed long int e = 0;
-		val = mpfr_get_d_2exp(&e, a.m_f.backend().data(), MPFR_RNDN);
-		exp = e;
-		align();
-		return *this;
-	}
-	inline void ToFixedFloat(CFixedFloat &a) const
-	{
-		a = val;
-		if (exp >= 0)
-			mpfr_mul_2ui(a.m_f.backend().data(), a.m_f.backend().data(), exp, MPFR_RNDN);
-		else
-			mpfr_div_2ui(a.m_f.backend().data(), a.m_f.backend().data(), -exp, MPFR_RNDN);
-	}
-
-	inline floatexp setLongDouble(long double a)
-	{
-		int e = 0;
-		val = std::frexp(a, &e);
-		exp = e;
-		align();
-		return *this;
-	}
-	inline long double toLongDouble() const
-	{
-		if (val == 0.0L)
-			return 0.0L;
-		if (exp >= INT_MAX)
-			return (val / 0.0L); // infinity
-		if (exp <= INT_MIN)
-			return (val * 0.0L); // zero
-		return std::ldexp((long double) val, exp);
-	}
-	inline long double toLongDouble(int nScaling) const
-	{
-		if(!nScaling)
-			return toLongDouble();
-		floatexp ret = *this;
-		// FIXME risky to go higher than this? 1e300 might be ok?
-		while(nScaling>99){
-			ret.val*=1e100;
-			ret.align();
-			nScaling-=100;
-		}
-		while(nScaling>29){
-			ret.val*=1e30;
-			ret.align();
-			nScaling-=30;
-		}
-		while(nScaling>9){
-			ret.val*=1e10;
-			ret.align();
-			nScaling-=10;
-		}
-		while(nScaling>2){
-			ret.val*=1e3;
-			ret.align();
-			nScaling-=3;
-		}
-		while(nScaling){
-			ret.val*=1e1;
-			ret.align();
-			nScaling--;
-		}
-		return ret.toLongDouble();
-	}
-
-  inline std::string toString() const
+	// construct
+  inline floatexp(double a, int64_t e, int dummy) { val = a; exp = e; (void) dummy; };
+  inline floatexp() : floatexp(0, 0, 0) { };
+  inline floatexp(const cfloatexp &x) : floatexp(x.val, x.exp, 0) { };
+  inline floatexp(const floatexp &x) : floatexp(x.val, x.exp, 0) { };
+  inline floatexp(int x) : floatexp(et_e_set_j(x)) { };
+  inline floatexp(double x) : floatexp(et_e_set_d(x)) { };
+  inline floatexp(long double x) : floatexp(et_e_set_l(x)) { };
+  inline floatexp(double a, int64_t e) : floatexp(et_e_set_dj(a, e)) { };
+  // convert
+	inline operator cfloatexp () const { return *this; };
+	inline explicit operator int () const { return et_i_set_e(*this); };
+	inline explicit operator double () const { return et_d_set_e(*this); };
+	inline explicit operator long double () const { return et_l_set_e(*this); };
+	inline explicit operator std::string () const 
   {
 		/*
 		  f = val 2^exp
@@ -446,6 +69,9 @@ public:
 		  d10 = 10^(log10 f - e10)
 		  d10 \in [1, 10)
 		*/
+		if (isnan(val)) return "nan";
+		if (isinf(val) && val > 0) return "inf";
+		if (isinf(val) && val < 0) return "-inf";
 		double lf = std::log10(std::abs(val)) + exp * std::log10(2.0);
 		int64_t e10 = std::floor(lf);
 		double d10 = std::pow(10, lf - e10) * ((val > 0) - (val < 0));
@@ -456,231 +82,182 @@ public:
 		  << d10 << 'E' << e10;
 		return os.str();
 	}
+	// assign
+	inline floatexp &operator=(const floatexp &x) { val = x.val; exp = x.exp; return *this; };
+	inline floatexp &operator+=(const floatexp &x) { return *this = *this + x; };
+	inline floatexp &operator-=(const floatexp &x) { return *this = *this - x; };
+	inline floatexp &operator*=(const floatexp &x) { return *this = *this * x; };
+	inline floatexp &operator/=(const floatexp &x) { return *this = *this / x; };
+  // convert with scaling
+	inline double todouble(int nScaling) const
+	{
+		if(!nScaling)
+			return double(*this);
+		floatexp ret = *this;
+		while(nScaling>9){
+			ret*=1e10;
+			nScaling-=10;
+		}
+		while(nScaling>2){
+			ret*=1e3;
+			nScaling-=3;
+		}
+		while(nScaling>0){
+			ret*=1e1;
+			nScaling--;
+		}
+		while(nScaling<-9){
+			ret/=1e10;
+			nScaling+=10;
+		}
+		while(nScaling<-2){
+			ret/=1e3;
+			nScaling+=3;
+		}
+		while(nScaling<0){
+			ret/=1e1;
+			nScaling++;
+		}
+		return double(ret);
+	}
+	inline long double toLongDouble(int nScaling) const
+	{
+		if(!nScaling)
+			return (long double)(*this);
+		floatexp ret = *this;
+		// FIXME risky to go higher than this? 1e300 might be ok?
+		while(nScaling>99){
+			ret*=1e100;
+			nScaling-=100;
+		}
+		while(nScaling>29){
+			ret*=1e30;
+			nScaling-=30;
+		}
+		while(nScaling>9){
+			ret*=1e10;
+			nScaling-=10;
+		}
+		while(nScaling>2){
+			ret*=1e3;
+			nScaling-=3;
+		}
+		while(nScaling){
+			ret*=1e1;
+			nScaling--;
+		}
+		return (long double)(ret);
+	}
+
 };
 
-inline floatexp operator*(long double a, floatexp b)
-{
-	return floatexp(a) * b;
-}
+inline floatexp operator-(const floatexp &a) { return et_e_neg_e(a); } 
 
-inline floatexp operator*(floatexp b, long double a)
-{
-	return floatexp(a) * b;
-}
+inline floatexp operator+(const floatexp &a, const floatexp &b) { return et_e_add_ee(a, b); } 
+inline floatexp operator-(const floatexp &a, const floatexp &b) { return et_e_sub_ee(a, b); } 
+inline floatexp operator*(const floatexp &a, const floatexp &b) { return et_e_mul_ee(a, b); } 
+inline floatexp operator/(const floatexp &a, const floatexp &b) { return et_e_div_ee(a, b); } 
 
-inline floatexp operator*(double a, floatexp b)
-{
-	return floatexp(a) * b;
-}
+inline floatexp operator+(const floatexp &a, int b) { return et_e_add_ei(a, b); } 
+inline floatexp operator-(const floatexp &a, int b) { return et_e_sub_ei(a, b); } 
+inline floatexp operator*(const floatexp &a, int b) { return et_e_mul_ei(a, b); } 
+inline floatexp operator/(const floatexp &a, int b) { return et_e_div_ei(a, b); } 
 
-inline floatexp operator*(floatexp b, double a)
-{
-	return floatexp(a) * b;
-}
+inline floatexp operator+(int a, const floatexp &b) { return et_e_add_ie(a, b); } 
+inline floatexp operator-(int a, const floatexp &b) { return et_e_sub_ie(a, b); } 
+inline floatexp operator*(int a, const floatexp &b) { return et_e_mul_ie(a, b); } 
+inline floatexp operator/(int a, const floatexp &b) { return et_e_div_ie(a, b); } 
 
-inline floatexp operator*(floatexp b, int a)
-{
-	return floatexp(a) * b;
-}
+inline floatexp operator+(const floatexp &a, double b) { return et_e_add_ed(a, b); } 
+inline floatexp operator-(const floatexp &a, double b) { return et_e_sub_ed(a, b); } 
+inline floatexp operator*(const floatexp &a, double b) { return et_e_mul_ed(a, b); } 
+inline floatexp operator/(const floatexp &a, double b) { return et_e_div_ed(a, b); } 
 
-inline floatexp operator+(double a, floatexp b)
-{
-	return floatexp(a) + b;
-}
+inline floatexp operator+(double a, const floatexp &b) { return et_e_add_de(a, b); } 
+inline floatexp operator-(double a, const floatexp &b) { return et_e_sub_de(a, b); } 
+inline floatexp operator*(double a, const floatexp &b) { return et_e_mul_de(a, b); } 
+inline floatexp operator/(double a, const floatexp &b) { return et_e_div_de(a, b); } 
 
-inline floatexp operator+(floatexp b, double a)
-{
-	return floatexp(a) + b;
-}
+inline floatexp operator+(const floatexp &a, long double b) { return et_e_add_el(a, b); } 
+inline floatexp operator-(const floatexp &a, long double b) { return et_e_sub_el(a, b); } 
+inline floatexp operator*(const floatexp &a, long double b) { return et_e_mul_el(a, b); } 
+inline floatexp operator/(const floatexp &a, long double b) { return et_e_div_el(a, b); } 
 
-inline floatexp operator*(int a, floatexp b)
-{
-	return double(a) * b;
-}
+inline floatexp operator+(long double a, const floatexp &b) { return et_e_add_le(a, b); } 
+inline floatexp operator-(long double a, const floatexp &b) { return et_e_sub_le(a, b); } 
+inline floatexp operator*(long double a, const floatexp &b) { return et_e_mul_le(a, b); } 
+inline floatexp operator/(long double a, const floatexp &b) { return et_e_div_le(a, b); } 
 
-inline floatexp operator/(int a, floatexp b)
-{
-	return floatexp(a) / b;
-}
+inline int cmp(const floatexp &a, const floatexp &b) { return et_i_cmp_ee(a, b); }
+inline bool operator< (const floatexp &a, const floatexp &b) { return cmp(a, b) <  0; }
+inline bool operator<=(const floatexp &a, const floatexp &b) { return cmp(a, b) <= 0; }
+inline bool operator> (const floatexp &a, const floatexp &b) { return cmp(a, b) >  0; }
+inline bool operator>=(const floatexp &a, const floatexp &b) { return cmp(a, b) >= 0; }
+inline bool operator==(const floatexp &a, const floatexp &b) { return cmp(a, b) == 0; }
+inline bool operator!=(const floatexp &a, const floatexp &b) { return cmp(a, b) != 0; }
 
-inline floatexp operator/(double a, floatexp b)
-{
-	return floatexp(a) / b;
-}
+inline int cmp(const floatexp &a, int b) { return et_i_cmp_ei(a, b); }
+inline bool operator< (const floatexp &a, int b) { return cmp(a, b) <  0; }
+inline bool operator<=(const floatexp &a, int b) { return cmp(a, b) <= 0; }
+inline bool operator> (const floatexp &a, int b) { return cmp(a, b) >  0; }
+inline bool operator>=(const floatexp &a, int b) { return cmp(a, b) >= 0; }
+inline bool operator==(const floatexp &a, int b) { return cmp(a, b) == 0; }
+inline bool operator!=(const floatexp &a, int b) { return cmp(a, b) != 0; }
 
-inline floatexp abs(floatexp a)
-{
-	return a.abs();
-}
+inline int cmp(int a, const floatexp &b) { return et_i_cmp_ie(a, b); }
+inline bool operator< (int a, const floatexp &b) { return cmp(a, b) <  0; }
+inline bool operator<=(int a, const floatexp &b) { return cmp(a, b) <= 0; }
+inline bool operator> (int a, const floatexp &b) { return cmp(a, b) >  0; }
+inline bool operator>=(int a, const floatexp &b) { return cmp(a, b) >= 0; }
+inline bool operator==(int a, const floatexp &b) { return cmp(a, b) == 0; }
+inline bool operator!=(int a, const floatexp &b) { return cmp(a, b) != 0; }
 
-inline floatexp sqrt(floatexp a)
-{
-  return floatexp
-    ( std::sqrt((a.exp & 1) ? 2.0 * a.val : a.val)
-    , (a.exp & 1) ? (a.exp - 1) / 2 : a.exp / 2
-    );
-}
+inline int cmp(const floatexp &a, double b) { return et_i_cmp_ed(a, b); }
+inline bool operator< (const floatexp &a, double b) { return cmp(a, b) <  0; }
+inline bool operator<=(const floatexp &a, double b) { return cmp(a, b) <= 0; }
+inline bool operator> (const floatexp &a, double b) { return cmp(a, b) >  0; }
+inline bool operator>=(const floatexp &a, double b) { return cmp(a, b) >= 0; }
+inline bool operator==(const floatexp &a, double b) { return cmp(a, b) == 0; }
+inline bool operator!=(const floatexp &a, double b) { return cmp(a, b) != 0; }
 
-inline floatexp log(floatexp a)
-{
-	return floatexp(std::log(a.val) + std::log(2.0) * a.exp);
-}
+inline int cmp(double a, const floatexp &b) { return et_i_cmp_de(a, b); }
+inline bool operator< (double a, const floatexp &b) { return cmp(a, b) <  0; }
+inline bool operator<=(double a, const floatexp &b) { return cmp(a, b) <= 0; }
+inline bool operator> (double a, const floatexp &b) { return cmp(a, b) >  0; }
+inline bool operator>=(double a, const floatexp &b) { return cmp(a, b) >= 0; }
+inline bool operator==(double a, const floatexp &b) { return cmp(a, b) == 0; }
+inline bool operator!=(double a, const floatexp &b) { return cmp(a, b) != 0; }
 
-inline floatexp mpfr_get_fe(const mpfr_t value, mpfr_rnd_t rnd = MPFR_RNDN)
-{
-	signed long int e = 0;
-	double l = mpfr_get_d_2exp(&e, value, rnd);
-	return floatexp(l, e);
-}
+inline int cmp(const floatexp &a, long double b) { return et_i_cmp_el(a, b); }
+inline bool operator< (const floatexp &a, long double b) { return cmp(a, b) <  0; }
+inline bool operator<=(const floatexp &a, long double b) { return cmp(a, b) <= 0; }
+inline bool operator> (const floatexp &a, long double b) { return cmp(a, b) >  0; }
+inline bool operator>=(const floatexp &a, long double b) { return cmp(a, b) >= 0; }
+inline bool operator==(const floatexp &a, long double b) { return cmp(a, b) == 0; }
+inline bool operator!=(const floatexp &a, long double b) { return cmp(a, b) != 0; }
 
-inline void mpfr_set_fe(mpfr_t value, floatexp fe, mpfr_rnd_t rnd = MPFR_RNDN)
-{
-	mpfr_set_d(value, fe.val, rnd);
-	if (fe.exp >= 0)
-	{
-		mpfr_mul_2ui(value, value, fe.exp, rnd);
-	}
-	else
-	{
-		mpfr_div_2ui(value, value, -fe.exp, rnd);
-	}
-}
+inline int cmp(long double a, const floatexp &b) { return et_i_cmp_le(a, b); }
+inline bool operator< (long double a, const floatexp &b) { return cmp(a, b) <  0; }
+inline bool operator<=(long double a, const floatexp &b) { return cmp(a, b) <= 0; }
+inline bool operator> (long double a, const floatexp &b) { return cmp(a, b) >  0; }
+inline bool operator>=(long double a, const floatexp &b) { return cmp(a, b) >= 0; }
+inline bool operator==(long double a, const floatexp &b) { return cmp(a, b) == 0; }
+inline bool operator!=(long double a, const floatexp &b) { return cmp(a, b) != 0; }
 
-inline long double mpfr_get_ld(const mpfr_t value, mpfr_rnd_t rnd = MPFR_RNDN)
-{
-	using std::ldexp;
-	signed long int e = 0;
-	long double l = mpfr_get_ld_2exp(&e, value, rnd);
-	if (l == 0.0L)
-		return 0.0L;
-	if (e >= INT_MAX)
-		return l / 0.0L;
-	if (e <= INT_MIN)
-		return l * 0.0L;
-	l = ldexp(l, e);
-	return l;
-}
+// misc
+inline floatexp abs(const floatexp &a) { return et_e_abs_e(a); }
+inline floatexp sqrt(const floatexp &a) { return et_e_sqrt_e(a); }
+inline floatexp log(const floatexp &a) { return et_e_log_e(a); }
+inline floatexp mul2(const floatexp &a) { return et_e_mul2_e(a); }
 
-inline bool operator>=(const floatexp &a, const floatexp &b)
-{
-	return b <= a;
-}
+inline int sgn(float a) { return (a >= 0) - (a < 0); }
+inline int sgn(double a) { return (a >= 0) - (a < 0); }
+inline int sgn(long double a) { return (a >= 0) - (a < 0); }
+inline int sgn(const floatexp &a) { return sgn(a.val); }
 
-inline bool operator!=(const floatexp &a, const floatexp &b)
-{
-	return a.val != b.val || a.exp != b.exp;
-}
-
-
-inline bool operator<(int a, const floatexp &b)
-{
-	return floatexp(a) < b;
-}
-
-inline bool operator<=(int a, const floatexp &b)
-{
-	return floatexp(a) <= b;
-}
-
-inline bool operator==(int a, const floatexp &b)
-{
-	return floatexp(a) == b;
-}
-
-inline bool operator>(int a, const floatexp &b)
-{
-	return floatexp(a) > b;
-}
-
-inline bool operator>=(int a, const floatexp &b)
-{
-	return floatexp(a) >= b;
-}
-
-inline bool operator!=(int a, const floatexp &b)
-{
-	return floatexp(a) != b;
-}
-
-inline bool operator<(const floatexp &a, int b)
-{
-	return a < floatexp(b);
-}
-
-inline bool operator==(const floatexp &a, int b)
-{
-	return a == floatexp(b);
-}
-
-inline bool operator>(const floatexp &a, int b)
-{
-	return a > floatexp(b);
-}
-
-inline bool operator>=(const floatexp &a, int b)
-{
-	return a >= floatexp(b);
-}
-
-inline bool operator!=(const floatexp &a, int b)
-{
-	return a != floatexp(b);
-}
-
-inline int sgn(float a)
-{
-	return (a >= 0) - (a < 0);
-}
-
-inline int sgn(double a)
-{
-	return (a >= 0) - (a < 0);
-}
-
-inline int sgn(long double a)
-{
-	return (a >= 0) - (a < 0);
-}
-
-inline int sgn(const floatexp &a)
-{
-	return sgn(a.val);
-}
-
-inline float diffabs(float c, float d) {
-  if (c >= 0.0f) {
-    if (c + d >= 0.0f) { return d; }
-    else { return -(2.0f * c + d); }
-  } else {
-    if (c + d > 0.0f) { return 2.0f * c + d; }
-    else { return -d; }
-  }
-}
-
-inline double diffabs(double c, double d) {
-  if (c >= 0.0) {
-    if (c + d >= 0.0) { return d; }
-    else { return -(2.0 * c + d); }
-  } else {
-    if (c + d > 0.0) { return 2.0 * c + d; }
-    else { return -d; }
-  }
-}
-
-inline long double diffabs(long double c, long double d) {
-  if (c >= 0.0L) {
-    if (c + d >= 0.0L) { return d; }
-    else { return -(2.0L * c + d); }
-  } else {
-    if (c + d > 0.0L) { return 2.0L * c + d; }
-    else { return -d; }
-  }
-}
-
-inline floatexp diffabs(const floatexp &c, const floatexp &d)
-{
-  if (c.val >= 0) if ((c + d).val >= 0) return d; else return -(c.mul2() + d);
-  else if ((c + d).val > 0) return c.mul2() + d; else return -d;
-}
+inline float diffabs(float a, float b) { return et_f_diffabs_ff(a, b); }
+inline double diffabs(double a, double b) { return et_d_diffabs_dd(a, b); }
+inline long double diffabs(long double a, long double b) { return et_l_diffabs_ll(a, b); }
+inline floatexp diffabs(const floatexp &a, const floatexp &b) { return et_e_diffabs_ee(a, b); }
 
 #endif
