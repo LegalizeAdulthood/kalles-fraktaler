@@ -146,6 +146,10 @@ Feedback:
 
 ## Change Log
 
+- **kf-2.13.12** (????-??-??)
+
+    - bugfix: thin black line in exterior between iteration bands (reported by CFJH)
+
 - **kf-2.13.11** (2018-10-29)
 
     - bugfix: fix translation with reuse reference enabled

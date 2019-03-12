@@ -1,7 +1,7 @@
 /*
 Kalles Fraktaler 2
 Copyright (C) 2013-2017 Karl Runmo
-Copyright (C) 2017-2018 Claude Heiland-Allen
+Copyright (C) 2017-2019 Claude Heiland-Allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -586,7 +586,7 @@ static inline double sqr(double x) { return x * x; }
 static inline double hypot2(double x, double y) { return x * x + y * y; }
 static inline double hypot1(double x, double y) { return sqrt(x * x + y * y); }
 
-void CFraktalSFT::SetColor(int nIndex, int nIter, double offs, int x, int y)
+void CFraktalSFT::SetColor(int nIndex, const int nIter0, double offs, int x, int y)
 {
 	if (m_bInhibitColouring) return;
 	srgb s;
@@ -595,13 +595,14 @@ void CFraktalSFT::SetColor(int nIndex, int nIter, double offs, int x, int y)
 	s.b = 0;
 	if (nIter<0 || (!GetShowGlitches() && GET_TRANS_GLITCH(offs)))
 		return;
-	if (nIter == m_nMaxIter)
+	if (nIter0 == m_nMaxIter)
 	{
 		s.r = s.g = s.b = 1;
 	}
 	else{
 		ColorMethod method = m_nColorMethod;
 		Differences diffs = m_nDifferences;
+		int nIter = nIter0;
 
 		double iter = (double)nIter + (double)1 - offs;
 		/*		if(1){//DE
@@ -962,7 +963,7 @@ void CFraktalSFT::SetColor(int nIndex, int nIter, double offs, int x, int y)
 		}
 	}
 	srgb8 s8 = dither(s, x, y);
-	if (nIter == m_nMaxIter)
+	if (nIter0 == m_nMaxIter)
 	{
 		s8.r = m_cInterior.r;
 		s8.g = m_cInterior.g;
