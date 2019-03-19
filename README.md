@@ -149,6 +149,7 @@ Feedback:
 - **kf-2.13.12** (????-??-??)
 
     - bugfix: thin black line in exterior between iteration bands (reported by CFJH)
+    - bugfix: malformed location no longer crashes (reported by Foxxie)
 
 - **kf-2.13.11** (2018-10-29)
 
