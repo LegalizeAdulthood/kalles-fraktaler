@@ -130,6 +130,10 @@ Feedback:
 
 ## Change Log
 
+- **kf-2.12.16** (????-??-??)
+
+    - bugfix: malformed location no longer crashes (reported by Foxxie)
+
 - **kf-2.12.15** (2018-10-29)
 
     - bugfix: corrupt image at transition between number types (eg near e600)
