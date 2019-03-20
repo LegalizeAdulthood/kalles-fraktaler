@@ -4661,7 +4661,7 @@ extern int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR commandline,int)
 	else
 	{
 		// prepare
-		output_log_message(Info, "kf " << version << " (c) 2013-2017 Karl Runmo, (c) 2017-2018 Claude Heiland-Allen");
+		output_log_message(Info, "kf " << version << " (c) 2013-2017 Karl Runmo, (c) 2017-2019 Claude Heiland-Allen");
 		if (g_args->bLoadSettings)
 		{
 			bool ret;

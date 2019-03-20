@@ -130,7 +130,7 @@ Feedback:
 
 ## Change Log
 
-- **kf-2.12.16** (????-??-??)
+- **kf-2.12.16** (2019-03-20)
 
     - bugfix: malformed location no longer crashes (reported by Foxxie)
     - upgrade to mpfr 4.0.2
