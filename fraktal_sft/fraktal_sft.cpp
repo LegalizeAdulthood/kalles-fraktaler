@@ -593,7 +593,7 @@ void CFraktalSFT::SetColor(int nIndex, const int nIter0, double offs, int x, int
 	s.r = 0;
 	s.g = 0;
 	s.b = 0;
-	if (nIter<0 || (!GetShowGlitches() && GET_TRANS_GLITCH(offs)))
+	if (nIter0<0 || (!GetShowGlitches() && GET_TRANS_GLITCH(offs)))
 		return;
 	if (nIter0 == m_nMaxIter)
 	{
