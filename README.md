@@ -133,6 +133,11 @@ Feedback:
 - **kf-2.12.16** (????-??-??)
 
     - bugfix: malformed location no longer crashes (reported by Foxxie)
+    - upgrade to mpfr 4.0.2
+    - upgrade to glm 0.9.9.4
+    - upgrade to libpng 1.6.36
+    - upgrade to libtiff 4.0.10
+    - upgrade to boost 1.69.0
 
 - **kf-2.12.15** (2018-10-29)
 
