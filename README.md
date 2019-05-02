@@ -37,8 +37,6 @@ Feedback:
 - "stop autosolve" during examine zoom sequence fails and corrupts zoom sequence
 - minimizing window during zoom sequence rendering corrupts image (saves blank
   image or repeated frame) (reported by gerrit and CFJH)
-- translating location while reuse reference is active leads to bad images
-  (reported by Dinkydau)
 - with "reuse reference", corrupt image at transition between number types
   (eg e600) (reported by CFJH) - workaround is to render in segments or force
   the number type higher ("use long double always", "use floatexp always")
