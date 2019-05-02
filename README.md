@@ -146,6 +146,11 @@ Feedback:
 
 ## Change Log
 
+- **kf-2.13.13** (????-??-??)
+
+    - bugfix: image is refreshed from first calculated pixels, instead of 1%
+      (reported by Fluoroantimonic_Acid)
+
 - **kf-2.13.12** (2019-03-20)
 
     - bugfix: thin black line in exterior between iteration bands (reported by CFJH)
