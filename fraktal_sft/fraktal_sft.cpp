@@ -1362,7 +1362,7 @@ void CFraktalSFT::Zoom(int nXPos, int nYPos, double nZoomSize, int nWidth, int n
 		RenderFractal(m_nX, m_nY, m_nMaxIter, m_hWnd);
 }
 
-int CFraktalSFT::GetProgress(int *pnGuessed, int *pnRDone, int *pnAP)
+double CFraktalSFT::GetProgress(int *pnGuessed, int *pnRDone, int *pnAP)
 {
 	if (pnGuessed)
 		*pnGuessed = m_nGuessed * 100.0 / (m_nDone ? m_nDone : 1);

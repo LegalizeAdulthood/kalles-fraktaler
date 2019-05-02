@@ -358,7 +358,7 @@ public:
 	int CountFrames(int nProcent);
 	void Zoom(int nXPos, int nYPos, double nZoomSize, int nWidth, int nHeight, BOOL bReuseCenter = FALSE);
 	BOOL Center(int &rx, int &ry, BOOL bSkipM = FALSE, BOOL bQuick = FALSE);
-	int GetProgress(int *pnGuessed = NULL, int *pnRDone = NULL, int *pnAP = NULL);
+	double GetProgress(int *pnGuessed = NULL, int *pnRDone = NULL, int *pnAP = NULL);
 	std::string GetPosition();
 	void GetIterations(int &nMin, int &nMax, int *pnCalculated = NULL, int *pnType = NULL, BOOL bSkipMaxIter = FALSE);
 	int GetIterations();

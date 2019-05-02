@@ -1485,7 +1485,8 @@ static int HandleDone(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam,int &nPos)
 	}
 nPos=0;
 	int nG, nR, nA;
-	int nP = g_SFT.GetProgress(&nG,&nR,&nA);
+	double nPd = g_SFT.GetProgress(&nG,&nR,&nA);
+	int nP = nPd;
 	if(!wParam && uMsg==WM_USER+199 && (!g_bAnim || !g_SFT.GetAnimateZoom())){
 		g_SFT.ApplyColors();
 		InvalidateRect(hWnd,NULL,FALSE);
@@ -1546,7 +1547,7 @@ nPos=10;
 	}
 	if(g_hwExamine && uMsg==WM_USER+199)
 		PostMessage(g_hwExamine,uMsg,wParam,lParam);
-	if(nP && (!g_bAnim || !g_SFT.GetAnimateZoom()))
+	if(nPd > 0.0 && (!g_bAnim || !g_SFT.GetAnimateZoom()))
 		InvalidateRect(hWnd,NULL,FALSE);
 nPos=11;
 	if(uMsg==WM_USER+199){

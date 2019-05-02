@@ -130,6 +130,11 @@ Feedback:
 
 ## Change Log
 
+- **kf-2.12.17** (????-??-??)
+
+    - bugfix: image is refreshed from first calculated pixels, instead of 1%
+      (reported by Fluoroantimonic_Acid)
+
 - **kf-2.12.16** (2019-03-20)
 
     - bugfix: malformed location no longer crashes (reported by Foxxie)
