@@ -304,8 +304,7 @@ class CFraktalSFT
 	BITMAPINFOHEADER m_bmiBkg;
 	int m_rowBkg;
 
-	int m_nInflections;
-	complex<CFixedFloat> *m_pInflections;
+	std::vector< complex<CFixedFloat> > m_Inflections;
 
 	void CalculateApproximation(int nType);
 	void CalculateReference();
