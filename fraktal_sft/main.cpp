@@ -1716,7 +1716,7 @@ nPos=23;
 			{
 				g_bSaveJpeg=FALSE;
 				char szFile[1024]={0};
-				strncpy(szFile, g_args->sSaveJPG.c_str(), sizeof(szFile));
+				strncpy(szFile, g_args->sSaveJPG.c_str(), sizeof(szFile)-1);
 				std::cerr << "saving JPG " << szFile << std::endl;
 				if(!g_SFT.SaveJpg(szFile,100))
 					std::cerr << "ERROR in save jpg: " << szFile << std::endl;
@@ -1738,7 +1738,7 @@ nPos=24;
 			{
 				g_bSavePng=FALSE;
 				char szFile[1024]={0};
-				strncpy(szFile, g_args->sSavePNG.c_str(), sizeof(szFile));
+				strncpy(szFile, g_args->sSavePNG.c_str(), sizeof(szFile)-1);
 				std::cerr << "saving PNG " << szFile << std::endl;
 				if(!g_SFT.SaveJpg(szFile,-1))
 					std::cerr << "ERROR in save png: " << szFile << std::endl;
@@ -1753,7 +1753,7 @@ nPos=24;
 			{
 				g_bSaveMap=FALSE;
 				char szFile[1024]={0};
-				strncpy(szFile, g_args->sSaveMap.c_str(), sizeof(szFile));
+				strncpy(szFile, g_args->sSaveMap.c_str(), sizeof(szFile)-1);
 				std::cerr << "saving KFB " << szFile << std::endl;
 				g_SFT.SaveMapB(szFile);
 			}
