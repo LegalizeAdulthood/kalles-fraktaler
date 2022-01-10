@@ -200,6 +200,10 @@ Feedback:
   (workaround: disable it in the Number Type dialog)
 - Rescaled Series is slow in some locations (reported by gerrit)
   (workaround: disable it in the Perturbation Tuning dialog)
+- Rescaled Double is broken when using single reference method
+  (workaround: disable it in the Number Type dialog)
+- Hybrids are broken when using single reference method
+  (workaround: use a different reference selection method)
 
 
 ## Differences From Original 2.11.1
