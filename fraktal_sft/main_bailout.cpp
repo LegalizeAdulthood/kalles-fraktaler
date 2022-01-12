@@ -214,13 +214,13 @@ extern INT_PTR WINAPI BailoutProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lPara
 
 #define T(idc,str) tooltips.push_back(CreateToolTip(idc, hWnd, str));
     T(IDC_BAILOUT_ITERATIONS, "Maximum number of iterations.")
-    T(IDC_BAILOUT_SMOOTHMETHOD, "Smoothing method.\nLog is better for high radius.\nLinear is better for low radius.\n")
-    T(IDC_BAILOUT_RADIUS_PRESET, "Preset escape radius value for iterations.\nLow setting is lowest possible for Mandelbrot and varies by power.")
-    T(IDC_BAILOUT_RADIUS_CUSTOM, "Custom escape radius value for iterations.\nOnly used when Custom setting is selected above.")
-    T(IDC_BAILOUT_RE, "Factor for real part when checking bailout.\n")
-    T(IDC_BAILOUT_IM, "Factor for imaginary part when checking bailout.\n")
-    T(IDC_BAILOUT_NORM_PRESET, "Preset norm power value when checking bailout.\n")
-    T(IDC_BAILOUT_NORM_CUSTOM, "Custom norm power value when checking bailout.\nOnly used when Custom setting is selected above.")
+    T(IDC_BAILOUT_SMOOTHMETHOD, "Smoothing method.\r\nLog is better for high radius.\r\nLinear is better for low radius.\r\n")
+    T(IDC_BAILOUT_RADIUS_PRESET, "Preset escape radius value for iterations.\r\nLow setting is lowest possible for Mandelbrot and varies by power.")
+    T(IDC_BAILOUT_RADIUS_CUSTOM, "Custom escape radius value for iterations.\r\nOnly used when Custom setting is selected above.")
+    T(IDC_BAILOUT_RE, "Factor for real part when checking bailout.\r\n")
+    T(IDC_BAILOUT_IM, "Factor for imaginary part when checking bailout.\r\n")
+    T(IDC_BAILOUT_NORM_PRESET, "Preset norm power value when checking bailout.\r\n")
+    T(IDC_BAILOUT_NORM_CUSTOM, "Custom norm power value when checking bailout.\r\nOnly used when Custom setting is selected above.")
     T(IDOK, "Apply and close")
     T(IDCANCEL, "Close and undo")
 #undef T

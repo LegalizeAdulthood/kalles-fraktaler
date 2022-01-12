@@ -94,7 +94,7 @@ extern INT_PTR WINAPI InformationProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM l
       T(IDC_INFORMATION_MIN_ITERS, "Minimum number of iteration in current view")
       T(IDC_INFORMATION_MAX_ITERS, "Maximum number of iteration in current view")
       T(IDC_INFORMATION_APPROX_ITERS, "Iterations skipped by Series Approximation")
-      T(IDC_INFORMATION_APPROX_TERMS, "Terms for Series approximation.\nMore terms usually yield more skipped iterations and faster rendering,\nhowever is more time consuming to be processed")
+      T(IDC_INFORMATION_APPROX_TERMS, "Terms for Series approximation.\r\nMore terms usually yield more skipped iterations and faster rendering,\r\nhowever is more time consuming to be processed")
       T(IDC_INFORMATION_CALCULATIONS, "Display number of calculations performed")
 #undef T
 

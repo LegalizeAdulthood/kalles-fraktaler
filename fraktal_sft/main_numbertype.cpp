@@ -32,13 +32,13 @@ extern INT_PTR WINAPI NumberTypeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
     SendMessage(hWnd, WM_SETICON, ICON_SMALL, LPARAM(g_hIcon));
     SendMessage(hWnd, WM_SETICON, ICON_BIG, LPARAM(g_hIcon));
 #define T(idc,str) tooltips.push_back(CreateToolTip(idc, hWnd, str));
-    T(IDC_NUMBERTYPE_SINGLE        , "Use single precision floating point.\nUntil zoom depth 1e20.\nBe vigilant: undetected glitches may occur.")
-    T(IDC_NUMBERTYPE_DOUBLE        , "Use double precision floating point.\nUntil zoom depth 1e290.\nNot supported by all OpenCL devices.")
-    T(IDC_NUMBERTYPE_LONGDOUBLE    , "Use x87 long double floating point.\nUntil zoom depth 1e4900.\nNot supported by any OpenCL devices.")
-    T(IDC_NUMBERTYPE_FLOATEXPSINGLE, "Use single precision with extended exponent.\nBe vigilant: undetected glitches may occur.")
-    T(IDC_NUMBERTYPE_FLOATEXPDOUBLE, "Use double precision with extended exponent.\nNot supported by all OpenCL devices.")
-    T(IDC_NUMBERTYPE_RESCALEDSINGLE, "Use single precision with rescaled iterations\nonly Mandelbrot power 2, Mandelbrot power 3, Burning Ship power 2, and hybrid formulas.\nBe vigilant: undetected glitches may occur.")
-    T(IDC_NUMBERTYPE_RESCALEDDOUBLE, "Use double precision with rescaled iterations\nonly Mandelbrot power 2, Mandelbrot power 3, Burning Ship power 2, and hybrid formulas.\nNot supported by all OpenCL devices.")
+    T(IDC_NUMBERTYPE_SINGLE        , "Use single precision floating point.\r\nUntil zoom depth 1e20.\r\nBe vigilant: undetected glitches may occur.")
+    T(IDC_NUMBERTYPE_DOUBLE        , "Use double precision floating point.\r\nUntil zoom depth 1e290.\r\nNot supported by all OpenCL devices.")
+    T(IDC_NUMBERTYPE_LONGDOUBLE    , "Use x87 long double floating point.\r\nUntil zoom depth 1e4900.\r\nNot supported by any OpenCL devices.")
+    T(IDC_NUMBERTYPE_FLOATEXPSINGLE, "Use single precision with extended exponent.\r\nBe vigilant: undetected glitches may occur.")
+    T(IDC_NUMBERTYPE_FLOATEXPDOUBLE, "Use double precision with extended exponent.\r\nNot supported by all OpenCL devices.")
+    T(IDC_NUMBERTYPE_RESCALEDSINGLE, "Use single precision with rescaled iterations\r\nonly Mandelbrot power 2, Mandelbrot power 3, Burning Ship power 2, and hybrid formulas.\r\nBe vigilant: undetected glitches may occur.")
+    T(IDC_NUMBERTYPE_RESCALEDDOUBLE, "Use double precision with rescaled iterations\r\nonly Mandelbrot power 2, Mandelbrot power 3, Burning Ship power 2, and hybrid formulas.\r\nNot supported by all OpenCL devices.")
     T(IDOK, "Apply and close.")
     T(IDCANCEL, "Close and undo.")
 #undef T

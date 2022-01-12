@@ -177,7 +177,7 @@ extern INT_PTR WINAPI WindowSizeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
     T(IDC_SIZE_WINDOW_CUSTOM_D, "Set custom window scale denominator")
     T(IDC_SIZE_DISPLAY_IMAGE_WIDTH, "Displays computed bitmap width")
     T(IDC_SIZE_DISPLAY_IMAGE_HEIGHT, "Displays computed bitmap height")
-    T(IDC_SIZE_DISPLAY_IMAGE_MPIXELS, "Displays computed bitmap megapixels\nKF cannot handle bitmaps bigger than 666 MP\nzoomasm may be limited to 16 MP depending on hardware")
+    T(IDC_SIZE_DISPLAY_IMAGE_MPIXELS, "Displays computed bitmap megapixels\r\nKF cannot handle bitmaps bigger than 666 MP\r\nzoomasm may be limited to 16 MP depending on hardware")
     T(IDC_SIZE_DISPLAY_TARGET_WIDTH, "Displays computed target width")
     T(IDC_SIZE_DISPLAY_TARGET_HEIGHT, "Displays computed target height")
     T(IDC_SIZE_DISPLAY_TARGET_MPIXELS, "Displays computed target megapixels")

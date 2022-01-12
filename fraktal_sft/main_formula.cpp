@@ -270,7 +270,7 @@ extern INT_PTR WINAPI FormulaProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lPara
     T(IDC_FORMULA_TRIANGLE_INEQUALITY_AVERAGE, "Select checkbox to compute triangle inequality average\nRequires OpenCL to be enabled\nReplaces final angle in phase (T) channel\nFor predictable results keep series approximation disabled")
     T(IDC_FORMULA_JITTER_SEED, "Pseudo-random number generator seed for pixel jitter\nSet to 0 to disable jitter")
     T(IDC_FORMULA_JITTER_SCALE, "Pixel jitter amount\nDefault 1.0")
-    T(IDC_FORMULA_JITTER_GAUSSIAN, "Select checkbox to use Gaussian jitter\nUncheck for uniform (recommended)")
+    T(IDC_FORMULA_JITTER_GAUSSIAN, "Select checkbox to use Gaussian jitter\r\nUncheck for uniform (recommended)")
     T(IDC_FORMULA_FROM_HYBRID, "Transfer from hybrid formula designer (if possible)")
     T(IDC_FORMULA_TO_HYBRID, "Transfer to hybrid formula designer (if possible)")
     T(IDOK, "Apply and close")

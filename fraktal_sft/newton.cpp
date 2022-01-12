@@ -1000,18 +1000,18 @@ extern int WINAPI NewtonProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		SendMessage(hWnd, WM_SETICON, ICON_BIG, LPARAM(g_hIcon));
 
 #define T(idc,str) tooltips.push_back(CreateToolTip(idc, hWnd, str));
-T(IDC_NR_ZOOM_TARGET_PRESET                   , "Relative zooming is between current zoom level and the minibrot.\nAbsolute zooming is relative to the size of the minibrot or atom domain.")
-T(IDC_NR_ZOOM_RELATIVE_START                  , "Override current zoom level for relative zooming.\nLeave empty use current zoom level at start time.")
+T(IDC_NR_ZOOM_TARGET_PRESET                   , "Relative zooming is between current zoom level and the minibrot.\r\nAbsolute zooming is relative to the size of the minibrot or atom domain.")
+T(IDC_NR_ZOOM_RELATIVE_START                  , "Override current zoom level for relative zooming.\r\nLeave empty use current zoom level at start time.")
 T(IDC_NR_ZOOM_RELATIVE_START_CAPTURE          , "Click to capture current zoom level for relative zooming.")
 T(IDC_NR_ZOOM_RELATIVE_FOLDING_PRESET         , "Power for relative doubling/quadrupling/etc the current pattern.")
-T(IDC_NR_ZOOM_RELATIVE_FOLDING_CUSTOM_EDIT    , "Enter custom relative power here.\nEnter 0.5 for 2x folding.\nTry -1 to zoom out.")
+T(IDC_NR_ZOOM_RELATIVE_FOLDING_CUSTOM_EDIT    , "Enter custom relative power here.\r\nEnter 0.5 for 2x folding.\r\nTry -1 to zoom out.")
 T(IDC_NR_ZOOM_ABSOLUTE_POWER_PRESET           , "Power for absolute double/quadrupling/etc of embedded Julia set features.")
-T(IDC_NR_ZOOM_ABSOLUTE_POWER_CUSTOM_EDIT      , "Enter custom absolute power here.\nEnter 1 to zoom to target.\nValues greater than 1 are not useful for Minibrot (Absolute).")
-T(IDC_NR_ZOOM_SIZE_FACTOR_PRESET              , "Factor for scaling the zoom after power is applied.\nBigger than 1 zooms out, smaller than 1 zooms in.")
-T(IDC_NR_ZOOM_SIZE_FACTOR_CUSTOM_EDIT         , "Enter custom size factor here.\nEnter 1 for actual size.")
-T(IDC_NR_ZOOM_BALL_METHOD                     , "When checked, use ball method for finding periods.\nOtherwise use box method.\nA different method (Taylor ball) is always used for power 2 Mandelbrot.")
-T(IDC_NR_ZOOM_ACTION_PRESET                   , "Stop after action in the sequence:\n- Find the period of the lowest period minibrot in the clicked region.\n- Center the view on the minibrot.\n- Zoom to the specified power and size factor.\n- Automatically skew the view.")
-T(IDC_NR_ZOOM_SAVE_PROGRESS                   , "When checked, save progress snapshots when finding the center.\nResuming is not yet automatic\nNewton zooming from a snapshot will do more iterations than necessary.")
+T(IDC_NR_ZOOM_ABSOLUTE_POWER_CUSTOM_EDIT      , "Enter custom absolute power here.\r\nEnter 1 to zoom to target.\r\nValues greater than 1 are not useful for Minibrot (Absolute).")
+T(IDC_NR_ZOOM_SIZE_FACTOR_PRESET              , "Factor for scaling the zoom after power is applied.\r\nBigger than 1 zooms out, smaller than 1 zooms in.")
+T(IDC_NR_ZOOM_SIZE_FACTOR_CUSTOM_EDIT         , "Enter custom size factor here.\r\nEnter 1 for actual size.")
+T(IDC_NR_ZOOM_BALL_METHOD                     , "When checked, use ball method for finding periods.\r\nOtherwise use box method.\r\nA different method (Taylor ball) is always used for power 2 Mandelbrot.")
+T(IDC_NR_ZOOM_ACTION_PRESET                   , "Stop after action in the sequence:\r\n- Find the period of the lowest period minibrot in the clicked region.\r\n- Center the view on the minibrot.\r\n- Zoom to the specified power and size factor.\r\n- Automatically skew the view.")
+T(IDC_NR_ZOOM_SAVE_PROGRESS                   , "When checked, save progress snapshots when finding the center.\r\nResuming is not yet automatic\r\nNewton zooming from a snapshot will do more iterations than necessary.")
 T(IDC_NR_ZOOM_STATUS                          , "Progress messages are displayed here.")
 T(IDCANCEL2                                   , "Click to cancel the Newton-Raphson zooming calculations.")
 #undef T
@@ -1057,7 +1057,7 @@ T(IDCANCEL2                                   , "Click to cancel the Newton-Raph
 
 		NewtonEnableWindows(hWnd);
 
-		SetDlgItemText(hWnd, IDC_NR_ZOOM_STATUS, "Click the fractal to start.\nZoom size affects the\nregion to search.");
+		SetDlgItemText(hWnd, IDC_NR_ZOOM_STATUS, "Click the fractal to start.\r\nZoom size affects the\r\nregion to search.");
 		return 1;
 	}
 	if (uMsg == WM_COMMAND && HIWORD(wParam) == LBN_SELCHANGE && (
@@ -1165,9 +1165,9 @@ T(IDCANCEL2                                   , "Click to cancel the Newton-Raph
 			PostMessage(GetParent(hWnd),WM_KEYDOWN,VK_F5,0);
 		}
 		if(lParam == -1 && !g_bNewtonStop)
-			MessageBox(GetParent(hWnd),"Could not apply Newton-Raphson\nYou may zoom in a little and try again","Error",MB_OK|MB_ICONSTOP);
+			MessageBox(GetParent(hWnd),"Could not apply Newton-Raphson\r\nYou may zoom in a little and try again","Error",MB_OK|MB_ICONSTOP);
 		if((lParam == 0 || lParam < -1 || lParam > 1))
-			MessageBox(GetParent(hWnd),"Unexpected stop message parameter (internal error)\n","Error",MB_OK|MB_ICONSTOP);
+			MessageBox(GetParent(hWnd),"Unexpected stop message parameter (internal error)\r\n","Error",MB_OK|MB_ICONSTOP);
 	}
 	return 0;
 }

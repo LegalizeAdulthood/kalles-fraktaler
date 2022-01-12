@@ -991,7 +991,7 @@ static int WINAPI JpegProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			}
 			else
 			{
-				MessageBox(hWnd, "Invalid dimensions\n\nMaximum width or height is 65536\nMaximum bitmap size is 2GiB\nIn pixels this makes:\n26754x26754 (1:1)\n35673x20066 (16:9)\n", "Error", MB_OK);
+				MessageBox(hWnd, "Invalid dimensions\r\n\r\nMaximum width or height is 65536\r\nMaximum bitmap size is 2GiB\r\nIn pixels this makes:\r\n26754x26754 (1:1)\r\n35673x20066 (16:9)\r\n", "Error", MB_OK);
 			}
 		}
 		else if(LOWORD(wParam)==IDC_EDIT1 && HIWORD(wParam)==EN_CHANGE){
@@ -4420,55 +4420,55 @@ static long WINAPI MainProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			SYSTEM_INFO sysinfo;
 			GetSystemInfo( &sysinfo );  //©
 			snprintf(szMsg, 4000,
-				"version %s\n"
-				"©2013-2017 Karl Runmo\n"
-				"©2017-2021 Claude Heiland-Allen\n"
-				"License: GNU AGPL v3+\n\n"
-				"Processors: %d\n"
-				"Compiled for %s\n"
-				"Precision: %d bits (%d decimal digits)\n"
-				"\nLibraries:\n"
-				"- JPEG 6b2 <https://jpegclub.org/support>\n"
-				"- TIFF 4.2.0 <http://www.simplesystems.org/libtiff/>\n"
-				"- PNG %s <https://libpng.org>\n"
-				"- ZLIB %s <https://zlib.net>\n"
-				"- GMP %d.%d.%d <https://gmplib.org>\n"
-				"- MPFR %s <https://mpfr.org>\n"
-				"- GSL %s <https://www.gnu.org/software/gsl>\n"
-				"- PIXMAN %s <https://pixman.org>\n"
-				"- MINGW-STD-THREADS <https://github.com/meganz/mingw-std-threads>\n"
-				"- ILMBASE %s <https://openexr.com>\n"
-				"- OPENEXR %s <https://openexr.com>\n"
-				"- GLM %d.%d.%d.%d <https://glm.g-truc.net>\n"
-				"- BOOST %d.%d.%d <https://boost.org>\n"
+				"version %s\r\n"
+				"©2013-2017 Karl Runmo\r\n"
+				"©2017-2021 Claude Heiland-Allen\r\n"
+				"License: GNU AGPL v3+\r\n\r\n"
+				"Processors: %d\r\n"
+				"Compiled for %s\r\n"
+				"Precision: %d bits (%d decimal digits)\r\n"
+				"\r\nLibraries:\r\n"
+				"- JPEG 6b2 <https://jpegclub.org/support>\r\n"
+				"- TIFF 4.2.0 <http://www.simplesystems.org/libtiff/>\r\n"
+				"- PNG %s <https://libpng.org>\r\n"
+				"- ZLIB %s <https://zlib.net>\r\n"
+				"- GMP %d.%d.%d <https://gmplib.org>\r\n"
+				"- MPFR %s <https://mpfr.org>\r\n"
+				"- GSL %s <https://www.gnu.org/software/gsl>\r\n"
+				"- PIXMAN %s <https://pixman.org>\r\n"
+				"- MINGW-STD-THREADS <https://github.com/meganz/mingw-std-threads>\r\n"
+				"- ILMBASE %s <https://openexr.com>\r\n"
+				"- OPENEXR %s <https://openexr.com>\r\n"
+				"- GLM %d.%d.%d.%d <https://glm.g-truc.net>\r\n"
+				"- BOOST %d.%d.%d <https://boost.org>\r\n"
 #ifdef KF_OPENCL
-				"- CLEW git.50751dd <https://github.com/martijnberger/clew>\n"
+				"- CLEW git.50751dd <https://github.com/martijnberger/clew>\r\n"
 #endif
-        "- GLFW %d.%d.%d <https://glfw.org>\n"
-        "\nCompiler:\n"
+        "- GLFW %d.%d.%d <https://glfw.org>\r\n"
+        "\r\nCompiler:\r\n"
 #if defined(__GNUC__) && ! defined(__clang__)
-        "- MINGW/G++ %d.%d.%d <https://gcc.gnu.org/>\n"
+        "- MINGW/G++ %d.%d.%d <https://gcc.gnu.org/>\r\n"
 #else
 #ifdef __clang__
-        "- LLVM/MINGW %d.%d.%d <https://github.com/mstorsjo/llvm-mingw>\n"
+        "- LLVM/MINGW %d.%d.%d <https://github.com/mstorsjo/llvm-mingw>\r\n"
 #else
-        "- Unknown"
+        "- Unknown\r\n"
 #endif
 #endif
-				"\nThanks to:\n"
-				" - K.I.Martin for applying Perturbation and Series Approximation on\n"
-				"   the Mandelbrot set and sharing theory and source code!\n"
-				" - Pauldelbrot for reliable glitch detection method\n"
-				" - Botond Kósa and knighty for extensions of Series Approximation\n"
-				" - laser blaster for Burning Ship formula\n"
-				" - stardust4ever for other fractal types\n"
-				" - claude for Newton-Raphson method\n"
-				" - gerrit for differencing variations\n"
-				" - Zhuoran for the single reference method\n"
-				" - Bruce Dawson for Hidden Mandelbrot formula\n"
-				" - Dinkydau, Fractal universe, CFJH, Foxxie, FractalAlex and others for bug reports\n"
-				" - Chillheimer for hosting <http://www.chillheimer.de/kallesfraktaler>\n"
-				" - Karl for releasing the source code under a Free Software license\n\n"
+				"\r\nThanks to:\r\n"
+				" - K.I.Martin for applying Perturbation and Series Approximation on\r\n"
+				"   the Mandelbrot set and sharing theory and source code!\r\n"
+				" - Pauldelbrot for reliable glitch detection method\r\n"
+				" - Botond Kósa and knighty for extensions of Series Approximation\r\n"
+				" - laser blaster for Burning Ship formula\r\n"
+				" - stardust4ever for other fractal types\r\n"
+				" - claude for Newton-Raphson method\r\n"
+				" - gerrit for differencing variations\r\n"
+				" - Zhuoran for the single reference method\r\n"
+				" - Bruce Dawson for Hidden Mandelbrot formula\r\n"
+				" - Dinkydau, Fractal universe, CFJH, Foxxie, FractalAlex and others for bug reports\r\n"
+				" - Chillheimer for hosting <http://www.chillheimer.de/kallesfraktaler>\r\n"
+				" - Karl for releasing the source code under a Free Software license\r\n\r\n"
 				"Homepage: <https://mathr.co.uk/kf/kf.html>",
 				version.c_str(),
 				int(sysinfo.dwNumberOfProcessors),
@@ -4501,14 +4501,14 @@ static long WINAPI MainProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		{
 			std::string latest = CheckForUpdate();
 			std::ostringstream os;
-			os << "Latest version: " << latest << "\n";
-			os << "Current version: " << version << "\n";
+			os << "Latest version: " << latest << "\r\n";
+			os << "Current version: " << version << "\r\n";
 			if (latest == "unknown")
-			  os << "Couldn't retrieve information!\n";
+			  os << "Couldn't retrieve information!\r\n";
 			else if (latest == version)
-			  os << "You are up to date!\n";
+			  os << "You are up to date!\r\n";
 			else
-			  os << "There is a newer version!\n";
+			  os << "There is a newer version!\r\n";
 	    return MessageBox(hWnd, os.str().c_str(), "Update Checker", MB_OK);
 		}
 	}

@@ -33,14 +33,14 @@ extern INT_PTR WINAPI PTSATuningProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lP
     SendMessage(hWnd, WM_SETICON, ICON_BIG, LPARAM(g_hIcon));
 
 #define T(idc,str) tooltips.push_back(CreateToolTip(idc, hWnd, str));
-    T(IDC_PTSATUNING_GLITCHTOLERANCE, "Set tolerance for glitch detection.\n0 is fast but may miss glitches.\n1 is slow but should catch all glitches.\nFractional values can be used.")
-    T(IDC_PTSATUNING_MAXREFERENCES, "Maximum number of references for glitch correction.\nHard upper limit is 10000.")
-    T(IDC_PTSATUNING_APPROXTOLERANCE, "Set tolerance for series approximation.\n0 is fast but may be distorted.\n1 is slow but should be more accurate.\nFractional values can be used.")
-    T(IDC_PTSATUNING_APPROXAUTO, "Use automatic number of terms for series approximation.\nBased on number of pixels remaining.")
-    T(IDC_PTSATUNING_APPROXTERMS, "Number of terms for series approximation.\nOnly used when automatic mode is disabled.")
-    T(IDC_PTSATUNING_DERIVATIVEGLITCH, "Use derivative-based glitch detection for power 2 Mandelbrot set.\nMay be faster, in rare cases may be inaccurate.")
-    T(IDC_PTSATUNING_REFERENCESTRICTZERO, "Use strict zero test for reference dynamic range.\nMay be necessary for some locations (e.g. Burning Ship near the needle)\nEnabling can be slower, but disabling can give inaccurate images.")
-    T(IDC_PTSATUNING_RESCALEDSERIES, "Use rescaled version of series approximation.\nFor power 2 Mandelbrot set only.\nMay be faster, but may expose bugs (test reports welcome).")
+    T(IDC_PTSATUNING_GLITCHTOLERANCE, "Set tolerance for glitch detection.\r\n0 is fast but may miss glitches.\r\n1 is slow but should catch all glitches.\r\nFractional values can be used.")
+    T(IDC_PTSATUNING_MAXREFERENCES, "Maximum number of references for glitch correction.\r\nHard upper limit is 10000.")
+    T(IDC_PTSATUNING_APPROXTOLERANCE, "Set tolerance for series approximation.\r\n0 is fast but may be distorted.\r\n1 is slow but should be more accurate.\r\nFractional values can be used.")
+    T(IDC_PTSATUNING_APPROXAUTO, "Use automatic number of terms for series approximation.\r\nBased on number of pixels remaining.")
+    T(IDC_PTSATUNING_APPROXTERMS, "Number of terms for series approximation.\r\nOnly used when automatic mode is disabled.")
+    T(IDC_PTSATUNING_DERIVATIVEGLITCH, "Use derivative-based glitch detection for power 2 Mandelbrot set.\r\nMay be faster, in rare cases may be inaccurate.")
+    T(IDC_PTSATUNING_REFERENCESTRICTZERO, "Use strict zero test for reference dynamic range.\r\nMay be necessary for some locations (e.g. Burning Ship near the needle)\r\nEnabling can be slower, but disabling can give inaccurate images.")
+    T(IDC_PTSATUNING_RESCALEDSERIES, "Use rescaled version of series approximation.\r\nFor power 2 Mandelbrot set only.\r\nMay be faster, but may expose bugs (test reports welcome).")
     T(IDOK, "Apply and close")
     T(IDCANCEL, "Close and undo")
 #undef T

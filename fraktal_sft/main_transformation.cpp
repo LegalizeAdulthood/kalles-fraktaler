@@ -125,13 +125,13 @@ extern INT_PTR WINAPI TransformationProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARA
 
 #define T(idc,str) tooltips.push_back(CreateToolTip(idc, hWnd, str));
 #define T2(idc1,idc2,str) T(idc1, str) T(idc2, str)
-    T(IDC_TRANSFORMATION_IMAGUP, "When enabled, imaginary axis points up (as in mathematics).\nWhen disabled (default, for historical reasons), imaginary axis points down.")
-    T2(IDC_TRANSFORMATION_ROTATEANGLE, IDC_TRANSFORMATION_ROTATEANGLE_SPIN, "Rotation angle in degrees.\nUse left mouse button to rotate and zoom image.")
-    T2(IDC_TRANSFORMATION_ZOOMAMOUNT, IDC_TRANSFORMATION_ZOOMAMOUNT_SPIN, "Zoom amount in cents of powers of two.\nUse left mouse button to rotate and zoom image.")
-    T2(IDC_TRANSFORMATION_STRETCHANGLE, IDC_TRANSFORMATION_STRETCHANGLE_SPIN, "Stretch angle in degrees.\nUse right mouse button to stretch image.")
-    T2(IDC_TRANSFORMATION_STRETCHAMOUNT, IDC_TRANSFORMATION_STRETCHAMOUNT_SPIN, "Stretch amount in cents of powers of two.\nUse right mouse button to stretch image.")
-    T(IDC_TRANSFORMATION_AUTOSKEW, "Calculate transformation that unskews stretched features.\nBased on the derivatives of the center of the image.\nAuto skew for minibrots is available via Newton-Raphson Zooming")
-    T(IDC_TRANSFORMATION_USEDDZ, "Also use derivative with respect to Z.\nThe derivative with respect to C is always used.")
+    T(IDC_TRANSFORMATION_IMAGUP, "When enabled, imaginary axis points up (as in mathematics).\r\nWhen disabled (default, for historical reasons), imaginary axis points down.")
+    T2(IDC_TRANSFORMATION_ROTATEANGLE, IDC_TRANSFORMATION_ROTATEANGLE_SPIN, "Rotation angle in degrees.\r\nUse left mouse button to rotate and zoom image.")
+    T2(IDC_TRANSFORMATION_ZOOMAMOUNT, IDC_TRANSFORMATION_ZOOMAMOUNT_SPIN, "Zoom amount in cents of powers of two.\r\nUse left mouse button to rotate and zoom image.")
+    T2(IDC_TRANSFORMATION_STRETCHANGLE, IDC_TRANSFORMATION_STRETCHANGLE_SPIN, "Stretch angle in degrees.\r\nUse right mouse button to stretch image.")
+    T2(IDC_TRANSFORMATION_STRETCHAMOUNT, IDC_TRANSFORMATION_STRETCHAMOUNT_SPIN, "Stretch amount in cents of powers of two.\r\nUse right mouse button to stretch image.")
+    T(IDC_TRANSFORMATION_AUTOSKEW, "Calculate transformation that unskews stretched features.\r\nBased on the derivatives of the center of the image.\r\nAuto skew for minibrots is available via Newton-Raphson Zooming")
+    T(IDC_TRANSFORMATION_USEDDZ, "Also use derivative with respect to Z.\r\nThe derivative with respect to C is always used.")
     T(IDOK, "Apply and close")
     T(IDCANCEL, "Close and undo")
 #undef T2
@@ -262,7 +262,7 @@ extern INT_PTR WINAPI TransformationProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARA
     if (lParam)
     {
       // autoskew success
-      SetDlgItemText(hWnd, IDC_TRANSFORMATION_STATUS, (s_skew + "\nDone").c_str());
+      SetDlgItemText(hWnd, IDC_TRANSFORMATION_STATUS, (s_skew + "\r\nDone").c_str());
       const mat2 total_transformation = mat2(g_skew[0], g_skew[1], g_skew[2], g_skew[3]);
       current_transformation = polar_decomposition(total_transformation * glm::inverse(polar_composition(original_transformation)));
       TransformRefresh(polar2(1, 1, 0, 1, 0));
@@ -279,7 +279,7 @@ extern INT_PTR WINAPI TransformationProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARA
     }
     else
     {
-      SetDlgItemText(hWnd, IDC_TRANSFORMATION_STATUS, (s_skew + "\nFailed").c_str());
+      SetDlgItemText(hWnd, IDC_TRANSFORMATION_STATUS, (s_skew + "\r\nFailed").c_str());
     }
     SetDlgItemText(hWnd, IDC_TRANSFORMATION_AUTOSKEW, "Auto Skew");
   }
