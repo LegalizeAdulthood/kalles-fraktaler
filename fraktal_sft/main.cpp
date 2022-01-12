@@ -4211,12 +4211,6 @@ static long WINAPI MainProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				if(BrowseFile(hWnd,FALSE,"Save as Jpeg","Jpeg\0*.jpg\0\0",szFile)){
 					if(!g_SFT.SaveJpg(szFile,g_JpegParams.nQuality,g_JpegParams.nWidth,g_JpegParams.nHeight))
 						MessageBox(hWnd,"File could not be saved","Error",MB_OK|MB_ICONSTOP);
-					szFile = replace_path_extension(szFile, "kfb");
-					if(FileExists(szFile) && MessageBox(hWnd,"Found a map file (.kfb) with the same name, do you want to replace it?","Kalle's Fraktaler",MB_YESNO)==IDYES)
-						g_SFT.SaveMapB(szFile);
-					szFile = replace_path_extension(szFile, "exr");
-					if(FileExists(szFile) && MessageBox(hWnd,"Found a map file (.exr) with the same name, do you want to replace it?","Kalle's Fraktaler",MB_YESNO)==IDYES)
-						g_SFT.SaveJpg(szFile,-3,g_JpegParams.nWidth,g_JpegParams.nHeight);
 				}
 			}
 		}
@@ -4236,12 +4230,6 @@ static long WINAPI MainProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				if(BrowseFile(hWnd,FALSE,"Save as PNG","PNG\0*.png\0\0",szFile)){
 					if(!g_SFT.SaveJpg(szFile,-1,g_JpegParams.nWidth,g_JpegParams.nHeight))
 						MessageBox(hWnd,"File could not be saved","Error",MB_OK|MB_ICONSTOP);
-					szFile = replace_path_extension(szFile, "kfb");
-					if(FileExists(szFile) && MessageBox(hWnd,"Found a map file (.kfb) with the same name, do you want to replace it?","Kalle's Fraktaler",MB_YESNO)==IDYES)
-						g_SFT.SaveMapB(szFile);
-					szFile = replace_path_extension(szFile, "exr");
-					if(FileExists(szFile) && MessageBox(hWnd,"Found a map file (.exr) with the same name, do you want to replace it?","Kalle's Fraktaler",MB_YESNO)==IDYES)
-						g_SFT.SaveJpg(szFile,-3,g_JpegParams.nWidth,g_JpegParams.nHeight);
 				}
 			}
 		}
@@ -4261,12 +4249,6 @@ static long WINAPI MainProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				if(BrowseFile(hWnd,FALSE,"Save as TIFF","TIFF\0*.tif\0\0",szFile)){
 					if(!g_SFT.SaveJpg(szFile,-2,g_JpegParams.nWidth,g_JpegParams.nHeight))
 						MessageBox(hWnd,"File could not be saved","Error",MB_OK|MB_ICONSTOP);
-					szFile = replace_path_extension(szFile, "kfb");
-					if(FileExists(szFile) && MessageBox(hWnd,"Found a map file (.kfb) with the same name, do you want to replace it?","Kalle's Fraktaler",MB_YESNO)==IDYES)
-						g_SFT.SaveMapB(szFile);
-					szFile = replace_path_extension(szFile, "exr");
-					if(FileExists(szFile) && MessageBox(hWnd,"Found a map file (.exr) with the same name, do you want to replace it?","Kalle's Fraktaler",MB_YESNO)==IDYES)
-						g_SFT.SaveJpg(szFile,-3,g_JpegParams.nWidth,g_JpegParams.nHeight);
 				}
 			}
 		}
