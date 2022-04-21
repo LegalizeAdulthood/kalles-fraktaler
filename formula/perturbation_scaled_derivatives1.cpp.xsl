@@ -171,7 +171,7 @@ bool perturbation_scaled_derivatives_<xsl:value-of select="@type" />_<xsl:value-
     const mantissa *zptr = reference_ptr_z&lt;mantissa&gt;(m_Reference);
     for (; antal &lt; nMaxIter &amp;&amp; rantal &lt; size_x; antal++)
     {
-      bool full_iteration = antal == N;
+      bool full_iteration = rantal == N;
       if (full_iteration)
       {
         using T = tfloatexp&lt;mantissa, exponent&gt;;
@@ -238,6 +238,12 @@ bool perturbation_scaled_derivatives_<xsl:value-of select="@type" />_<xsl:value-
             xr = XxrF;
             xi = XxiF;
             rantal = 0;
+            K = 0;
+            N = Nptr[K];
+            X = Xptr[K];
+            Y = Yptr[K];
+            Z0 = Zptr[K];
+            ++K;
             Xr = 0;
             Xi = 0;
             Xz = 0;
@@ -395,6 +401,12 @@ bool perturbation_scaled_derivatives_<xsl:value-of select="@type" />_<xsl:value-
             const tfloatexp&lt;mantissa, exponent> xr = Xxrd;
             const tfloatexp&lt;mantissa, exponent> xi = Xxid;
             rantal = 0;
+            K = 0;
+            N = Nptr[K];
+            X = Xptr[K];
+            Y = Yptr[K];
+            Z0 = Zptr[K];
+            ++K;
             Xr = 0;
             Xi = 0;
             Xz = 0;

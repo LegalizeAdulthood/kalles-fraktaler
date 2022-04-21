@@ -115,7 +115,7 @@ bool perturbation_scaled_<xsl:value-of select="@type" />_<xsl:value-of select="@
     const mantissa *zptr = reference_ptr_z&lt;mantissa&gt;(m_Reference);
     for (; antal &lt; nMaxIter &amp;&amp; rantal &lt; size_x; antal++)
     {
-      bool full_iteration = antal == n;
+      bool full_iteration = rantal == n;
       if (full_iteration)
       {
         using T = tfloatexp&lt;mantissa, exponent&gt;;
@@ -182,6 +182,12 @@ bool perturbation_scaled_<xsl:value-of select="@type" />_<xsl:value-of select="@
             xr = Xxr;
             xi = Xxi;
             rantal = 0;
+            k = 0;
+            n = Nptr[k];
+            X = Xptr[k];
+            Y = Yptr[k];
+            Z = Zptr[k];
+            ++k;
             Xr = 0;
             Xi = 0;
             Xz = 0;
@@ -278,6 +284,12 @@ bool perturbation_scaled_<xsl:value-of select="@type" />_<xsl:value-of select="@
             const tfloatexp&lt;mantissa, exponent> xr = Xxrd;
             const tfloatexp&lt;mantissa, exponent> xi = Xxid;
             rantal = 0;
+            k = 0;
+            n = Nptr[k];
+            X = Xptr[k];
+            Y = Yptr[k];
+            Z = Zptr[k];
+            ++k;
             Xr = 0;
             Xi = 0;
             Xz = 0;
