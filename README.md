@@ -7,7 +7,7 @@ keywords: [escape time, fractal, deep zoom]
 abstract: |
   Fast deep zooming Free Software for fractal graphics (Mandelbrot,
   Burning Ship, etc).
-date: 2021-12-05
+date: 2022-04-21
 ...
 
 # Kalles Fraktaler 2 +
@@ -200,10 +200,10 @@ Feedback:
   (workaround: disable it in the Number Type dialog)
 - Rescaled Series is slow in some locations (reported by gerrit)
   (workaround: disable it in the Perturbation Tuning dialog)
-- Rescaled Double is broken when using single reference method
-  (workaround: disable it in the Number Type dialog)
 - Hybrids are broken when using single reference method
   (workaround: use a different reference selection method)
+  A proper solution would need multiple reference orbits
+  at different phases of the hybrid (pre)periodic loop
 
 
 ## Differences From Original 2.11.1
@@ -359,6 +359,20 @@ earlier).
 
 
 ## Change Log
+
+### kf-2.15.5.1
+
+2022-04-21
+
+  - fix: single reference mode with rescaled calculations works properly
+    (thanks superheal)
+    - known issue: may fail if there is more than one critical point
+    - known issue: does not work with every hybrid formula (only very
+      simple cases work)
+  - fix: remove annoying prompt to resave map with same name as image
+    (thanks gerrit)
+  - fix line endings for GUI (tooltips etc) (thanks gerrit)
+  - fix some typos in the documentation (thanks gerrit)
 
 ### kf-2.15.5
 

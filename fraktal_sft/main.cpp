@@ -1,7 +1,7 @@
 /*
 Kalles Fraktaler 2
 Copyright (C) 2013-2017 Karl Runmo
-Copyright (C) 2017-2021 Claude Heiland-Allen
+Copyright (C) 2017-2022 Claude Heiland-Allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -4404,7 +4404,7 @@ static long WINAPI MainProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			snprintf(szMsg, 4000,
 				"version %s\r\n"
 				"©2013-2017 Karl Runmo\r\n"
-				"©2017-2021 Claude Heiland-Allen\r\n"
+				"©2017-2022 Claude Heiland-Allen\r\n"
 				"License: GNU AGPL v3+\r\n\r\n"
 				"Processors: %d\r\n"
 				"Compiled for %s\r\n"

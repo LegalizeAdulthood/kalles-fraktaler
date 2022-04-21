@@ -1,7 +1,7 @@
 /*
 Kalles Fraktaler 2
 Copyright (C) 2013-2017 Karl Runmo
-Copyright (C) 2017-2021 Claude Heiland-Allen
+Copyright (C) 2017-2022 Claude Heiland-Allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -293,6 +293,6 @@ const std::string usage =
 "    -h, -H, -?, --help              show this help\n"
 ;
 
-const std::string version = "2.15.5";
-const int kfr_version_number = 2150500;
-const int kfs_version_number = 2150500;
+const std::string version = "2.15.5.1";
+const int kfr_version_number = 2150501;
+const int kfs_version_number = 2150501;
