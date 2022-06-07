@@ -1,5 +1,5 @@
-WINPREFIXPLUS ?= $(HOME)/win/armv7
-WINPREFIX ?= $(HOME)/win/armv7
+WINPREFIXPLUS ?= $(HOME)/win/win32/armv7
+WINPREFIX ?= $(HOME)/win/win32/armv7
 SIMD ?= 0
 OPENCL ?= 1
 COMPILE ?= armv7-w64-mingw32-g++

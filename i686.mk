@@ -1,5 +1,5 @@
-WINPREFIXPLUS ?= $(HOME)/win/i686
-WINPREFIX ?= $(HOME)/win/i686
+WINPREFIXPLUS ?= $(HOME)/win/win32/i686
+WINPREFIX ?= $(HOME)/win/win32/i686
 SIMD ?= 0
 OPENCL ?= 1
 COMPILE ?= i686-w64-mingw32-g++

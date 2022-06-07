@@ -1,5 +1,5 @@
-WINPREFIXPLUS ?= $(HOME)/win/aarch64
-WINPREFIX ?= $(HOME)/win/aarch64
+WINPREFIXPLUS ?= $(HOME)/win/win32/aarch64
+WINPREFIX ?= $(HOME)/win/win32/aarch64
 SIMD ?= 2
 OPENCL ?= 1
 COMPILE ?= aarch64-w64-mingw32-g++
