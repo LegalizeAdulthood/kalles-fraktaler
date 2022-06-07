@@ -1,7 +1,7 @@
 /*
 Kalles Fraktaler 2
 Copyright (C) 2013-2017 Karl Runmo
-Copyright (C) 2017-2018 Claude Heiland-Allen
+Copyright (C) 2017-2022 Claude Heiland-Allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef KF_CDECNUMBER_H
 #define KF_CDECNUMBER_H
 
+#include <mingw-std-threads/mingw.mutex.h>
 #include <boost/multiprecision/mpfr.hpp>
 typedef boost::multiprecision::number<boost::multiprecision::mpfr_float_backend<0>> decNumber;
 
