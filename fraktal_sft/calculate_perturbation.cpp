@@ -1,7 +1,7 @@
 /*
 Kalles Fraktaler 2
 Copyright (C) 2013-2017 Karl Runmo
-Copyright (C) 2017-2021 Claude Heiland-Allen
+Copyright (C) 2017-2022 Claude Heiland-Allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -17,6 +17,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <cmath>
+
 #include "fraktal_sft.h"
 #include "complex.h"
 #include "reference.h"
@@ -30,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 template <typename mantissa>
 void CFraktalSFT::MandelCalc1()
 {
+  using std::pow;
   m_bIterChanged = TRUE;
   mantissa yr = 0, yi = 0;
   mantissa epsilon(m_epsilon);
@@ -37,9 +40,9 @@ void CFraktalSFT::MandelCalc1()
   int64_t antal;
   const double p = GetBailoutNorm();
   const double nBailout = GetBailoutRadius();
-  const mantissa nBailoutSmall = mantissa(GetBailoutSmall());
-  const double nBailout2 = p < 1.0/0.0 ? pow(nBailout, p) : nBailout;
-  const mantissa nBailoutSmallP = p < 1.0/0.0 ? pow(nBailoutSmall, p) : nBailoutSmall;
+  const double nBailoutSmall = GetBailoutSmall();
+  const double nBailout2 = p < 1.0/0.0 ? std::pow(nBailout, p) : nBailout;
+  const mantissa nBailoutSmallP = mantissa(p < 1.0/0.0 ? std::pow(nBailoutSmall, p) : nBailoutSmall);
   const mantissa s = mantissa(m_fPixelSpacing);
   const mat2 TK = GetTransformMatrix();
   const bool noDerivativeGlitch = ! GetDerivativeGlitch();
@@ -270,7 +273,7 @@ void CFraktalSFT::MandelCalcScaled()
   int64_t antal;
   const double nBailout = GetBailoutRadius();
   const double p = GetBailoutNorm();
-  const double nBailout2 = p < 1.0/0.0 ? pow(nBailout, p) : nBailout;
+  const double nBailout2 = p < 1.0/0.0 ? std::pow(nBailout, p) : nBailout;
   const tfloatexp<mantissa, exponent> s = tfloatexp<mantissa, exponent>(m_fPixelSpacing);
   const mat2 TK = GetTransformMatrix();
   const bool derivatives = GetDerivatives();
@@ -374,7 +377,7 @@ void CFraktalSFT::MandelCalcSIMD()
   int64_t antal;
   const double nBailout = GetBailoutRadius();
   const double p = GetBailoutNorm();
-  const double nBailout2 = p < 1.0/0.0 ? pow(nBailout, p) : nBailout;
+  const double nBailout2 = p < 1.0/0.0 ? std::pow(nBailout, p) : nBailout;
   const double s = double(m_fPixelSpacing);
   const mat2 TK = GetTransformMatrix();
   const bool noDerivativeGlitch = ! GetDerivativeGlitch();

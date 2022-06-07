@@ -7,7 +7,7 @@ keywords: [escape time, fractal, deep zoom]
 abstract: |
   Fast deep zooming Free Software for fractal graphics (Mandelbrot,
   Burning Ship, etc).
-date: 2022-04-21
+date: 2022-06-07
 ...
 
 # Kalles Fraktaler 2 +
@@ -359,6 +359,26 @@ earlier).
 
 
 ## Change Log
+
+### kf-2.15.5.2
+
+2022-06-07
+
+  - fix: OpenCL event leak
+  - fix: ambiguous overloads
+  - fix: boost mpfr inclusion requires mingw-std-threads mutex
+  - build system: change dependency prefix to `~/win/win32/$arch`
+  - update dependencies:
+    - boost 1.79.0
+    - zlib 1.2.12
+    - tiff 4.4.0
+    - openexr 2.5.8
+    - glfw 3.3.7
+    - pixman
+      - git plus srgb without alpha
+      - branch has been force-pushed
+  - update compiler:
+    - g++-mingw-w64 10.2.1-6+24.2
 
 ### kf-2.15.5.1
 

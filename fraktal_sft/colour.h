@@ -1,7 +1,7 @@
 /*
 Kalles Fraktaler 2
 Copyright (C) 2013-2017 Karl Runmo
-Copyright (C) 2017-2018 Claude Heiland-Allen
+Copyright (C) 2017-2022 Claude Heiland-Allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -19,6 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #ifndef KF_COLOUR_H
 #define KF_COLOUR_H 1
+
+#include <cmath>
 
 // linear rgb in 0..1
 
@@ -48,7 +50,7 @@ inline float srgb2lrgb1(float s)
 {
   if (s <= 0.04045f)
     return s / 12.92f;
-  return pow((s + 0.055f) / 1.055f, 2.4f);
+  return std::pow((s + 0.055f) / 1.055f, 2.4f);
 }
 
 inline lrgb srgb2lrgb(const srgb &a)
@@ -64,7 +66,7 @@ inline float lrgb2srgb1(float l)
 {
   if (l <= 0.0031308f)
     return l * 12.92f;
-  return 1.055f  * pow(l, 1.0f / 2.4f) - 0.055f;
+  return 1.055f * std::pow(l, 1.0f / 2.4f) - 0.055f;
 }
 
 inline srgb lrgb2srgb(const lrgb &a)
@@ -97,9 +99,9 @@ inline srgb8 dither(const srgb &s, int x, int y)
     mask[c] = ((((x + c * 67) + y * 236) * 119) & 255) / 256.0f;
   }
   srgb8 o;
-  o.r = (unsigned char) floor(255.0f * s.r + mask[0]);
-  o.g = (unsigned char) floor(255.0f * s.g + mask[1]);
-  o.b = (unsigned char) floor(255.0f * s.b + mask[2]);
+  o.r = (unsigned char) std::floor(255.0f * s.r + mask[0]);
+  o.g = (unsigned char) std::floor(255.0f * s.g + mask[1]);
+  o.b = (unsigned char) std::floor(255.0f * s.b + mask[2]);
   return o;
 }
 
@@ -116,7 +118,7 @@ inline srgb hsv2rgb(const hsv &a)
 	float hue = a.h * 6.0f;
   float sat = a.s;
   float bri = a.v;
-	int i = (int) floor(hue);
+	int i = (int) std::floor(hue);
 	float f = hue - i;
 	if (! (i & 1))
 		f = 1.0f - f;
