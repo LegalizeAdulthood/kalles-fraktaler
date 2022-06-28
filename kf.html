@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Claude Heiland-Allen" />
-  <meta name="dcterms.date" content="2022-06-07" />
+  <meta name="dcterms.date" content="2022-06-28" />
   <meta name="keywords" content="escape time, fractal, deep zoom, Mandelbrot set, Burning Ship" />
   <meta name="description" content="Fast deep zooming Free Software for fractal graphics (Mandelbrot, Burning Ship, etc)." />
   <title>Kalles Fraktaler 2 +</title>
@@ -22,7 +22,8 @@
 </head>
 <body>
 <h1 id='top'><a href='#top'>Kalles Fraktaler 2 +</a></h1>
-<p><a href="#quick-start" title="quick start">quick start</a>
+<p><a href="#future" title="future">future</a>
+ | <a href="#quick-start" title="quick start">quick start</a>
  | <a href="#limits" title="limits">limits</a>
  | <a href="#videos" title="videos">videos</a>
  | <a href="#download" title="download">download</a>
@@ -37,6 +38,49 @@
 <p>I (<a href='/' title='mathr.co.uk'>Claude Heiland-Allen</a>) forked the code and swapped out the custom arbitrary precision floating point code for highly optimized libraries, making it even faster.  Cross-compiled to Windows from Linux MINGW64.  Now with many other enhancements.</p>
 <h2 id='donate'><a href='#donate' title='Donate'>Donate</a></h2>
 <p>You can donate to support my work at <a href='https://ko-fi.com/claudeha' title='ko-fi.com/claudeha'>ko-fi.com/claudeha</a>.</p>
+<h2 id="future"><a href="#future">Future</a></h2>
+<p>Kalles Fraktaler 2 + development is mostly stopped from my side,
+though there may be occasional bug fix releases.  In particular this
+means that the bilinear approximation (BLA) acceleration method, which
+is much better than series approximation (SA) (including NanoMB1 and
+NanoMB2) is unlikely to be implemented in KF any time soon.  The work
+required to implement BLA in KF, with over 100 formulas, is simply too
+great compared to my available time for the project.</p>
+<p>On the plus side, there are some other fractal renderers supporting
+deep zooms with BLA:</p>
+<dl>
+<dt><a href="https://gbillotey.github.io/Fractalshades">fractalshades</a></dt>
+<dd><blockquote>Fractalshades is a Python package for creating static
+and interactive visualisations of 2d fractals. It targets Windows and
+Unix operating systems and implements efficient algorithms for very-deep
+exploration of the Mandelbrot and the Burning_Ship sets (1.e-2000 scale
+and beyond).</blockquote><p>As an example, it renders a Mandelbrot set
+minibrot at 5e-433 in just over 2 minutes, where the same location takes
+about 20 minutes in the latest KF using NanoMB1.  It also has much more
+flexible colouring options, including stripe colouring and lighting
+effects, but it does not yet support as many formulas as KF.</p></dd>
+<dt><a href="mailto:fraktaler@mathr.co.uk">fraktaler-3</a></dt>
+<dd><blockquote>fraktaler-3 is a cross-platform program (Linux, Windows,
+Android, Web) for fast deep zooming of hybrid escape-time 2D fractals.
+It has a graphical explorer using SDL2, OpenGL and Dear ImGUI, and a
+command line version for high resolution images and zoom sequences, with
+export of raw data in EXR format compatible with KF and zoomasm.</blockquote>
+<p>As an example, it also renders the example minibrot at 5e-433 in just over
+2 minutes, compared to 20 minutes for KF using NanoMB1.  It also has an
+OpenCL mode which allows using a GPU for acceleration, as well as being
+more efficient even when a CPU is used.  Built in colouring options are
+very limited, and its hybrid formula editor (the only way to define
+formulas) is less flexible than KF's.</p>
+<p>Currently not ready for general use, contact the author if you would
+like to help test early versions.</p></dd>
+<dt>...</dt>
+<dd><p>If you know of any others (whether closed or open source, payware
+or gratis), please let me know so I can add them to this list!</p></dd>
+</dl>
+<p>There is also an experimental
+<a href="https://github.com/smurfix/kf2">cross-platform fork of KF</a>,
+maybe it will add BLA in the future.</p>
+<p>
 <h2 id="quick-start"><a href="#quick-start">Quick Start</a></h2>
 <ul>
 <li><p>Download the latest archive from the website: <a href="#download" class="uri">mathr.co.uk/kf/kf.html#download</a></p></li>
