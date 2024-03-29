@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "kalles-fraktaler",
+  "version": "1.0.0",
+  "dependencies": [
+    "glfw3",
+    "mpfr",
+    "gmp",
+    "ijg-libjpeg",
+    "tiff",
+    "pixman",
+    "libpng",
+    "libzip",
+    "gsl",
+    "imath",
+    "openexr"
+  ]
+}

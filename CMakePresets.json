@@ -1,0 +1,96 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "project-name-preset",
+      "hidden": true,
+      "description": "Sets the project name based on the preset",
+      "cacheVariables": {
+        "ID_PROJECT_NAME": {
+          "type": "STRING",
+          "value": "Kalles-Fraktaler ${presetName}"
+        }
+      }
+    },
+    {
+      "name": "sibling-build-preset",
+      "hidden": true,
+      "description": "Use a sibling directory for the build based on the preset name",
+      "binaryDir": "${sourceDir}/../build-${presetName}"
+    },
+    {
+      "name": "vcpkg",
+      "hidden": true,
+      "description": "Configure the toolchain for vcpkg",
+      "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "compile-commands",
+      "hidden": true,
+      "description": "Generate a compile_commands.json database",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+      }
+    },
+    {
+      "name": "no-testing",
+      "hidden": true,
+      "description": "Turn off building of tests",
+      "cacheVariables": {
+        "BUILD_TESTING": false
+      }
+    },
+    {
+      "name": "default",
+      "displayName": "Configure with default settings",
+      "inherits": [ "sibling-build-preset", "project-name-preset", "vcpkg" ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "displayName": "Build with default settings",
+      "configurePreset": "default"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "settings",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "default",
+      "displayName": "Test with default settings",
+      "configurePreset": "default",
+      "inherits": [ "settings" ]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "default",
+      "displayName": "Workflow with default settings: configure, build and test",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default"
+        },
+        {
+          "type": "build",
+          "name": "default"
+        },
+        {
+          "type": "test",
+          "name": "default"
+        }
+      ]
+    }
+  ]
+}

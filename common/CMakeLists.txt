@@ -1,0 +1,16 @@
+add_library(common
+    FolderBrowser.cpp
+    FolderBrowser.h
+    getimage.cpp
+    getimage.h
+    parallell.cpp
+    parallell.h
+    StringVector.cpp
+    StringVector.h
+    matrix.cpp
+    matrix.h
+    bitmap.cpp
+    bitmap.h
+    barrier.h
+    memory.h
+)
